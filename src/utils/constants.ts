@@ -1,3 +1,7 @@
+export const ENVS = {
+  apiUrl: process.env.apiUrl as string,
+};
+
 export const publicRoutes = ["/"];
 
 export const defaultColor = "#a40100";

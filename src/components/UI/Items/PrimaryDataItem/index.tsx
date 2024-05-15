@@ -30,7 +30,7 @@ const PrimaryDataItem = ({ data, type }: Props) => {
       !Array.isArray(objValue) ||
       ["projects", "teamUids"].includes(objKey as string)
     ) {
-      return formatItem(objValue, objKey === "birthday" ? "age" : objKey);
+      return formatItem(objValue, objKey);
     }
 
     if (Array.isArray(objValue)) {
@@ -45,13 +45,34 @@ const PrimaryDataItem = ({ data, type }: Props) => {
       );
     }
 
-    return null;
+    if (objValue < 1) {
+      return `${objValue * 100}%`;
+    }
+
+    return objValue;
   };
 
   return (
-    <div className=" relative flex w-[90%] first:mt-0 mt-4 md:mt-0 shadow-2xl md:shadow-none md:border-t-0 md:border-x-0 md:rounded-none border border-grey-200 md:!border-b md:!border-b-gray-300 rounded-[15px] flex-col md:flex-row justify-between text-lg mx-auto md:hover:dark:bg-[#333333] md:hover:bg-gray-200 even:bg-gray-100 dark:even:bg-[#333333] ">
+    <div className=" relative flex w-[90%] wrap first:mt-0 mt-4 md:mt-0 shadow-2xl md:shadow-none md:border-t-0 md:border-x-0 md:rounded-none border border-grey-200 md:!border-b md:!border-b-gray-300 rounded-[15px] flex-col md:flex-row justify-between text-lg mx-auto md:hover:dark:bg-[#333333] md:hover:bg-gray-200 even:bg-gray-100 dark:even:bg-[#333333] ">
       {sortedData.map(([objKey, objValue], index) => {
-        if (["id", "uid", "comments", "description"].includes(objKey)) {
+        if (
+          [
+            "costumer_id",
+            "debts_ids",
+            "createdAt",
+            "updatedAt",
+            "uid",
+            "comments",
+            "description",
+            "details",
+            "adress",
+            "cep",
+            "__v",
+            "_id",
+            "due_dates",
+            "debt_id",
+          ].includes(objKey)
+        ) {
           return null;
         }
         return (
@@ -59,7 +80,8 @@ const PrimaryDataItem = ({ data, type }: Props) => {
             key={`${
               (data as any)?.uid || (data as any)?.id
             }-${objKey}-${index}`}
-            className={`flex flex-col border-r-gray-400 md:border-none md:border-r min-w-[150px] last:border-0 gap-2 justify-center items-center md:first:justify-start first:min-w-[200px] p-4 overflow-x-hidden overflow-ellipsis w-full`}
+            style={{ overflowWrap: "anywhere" }}
+            className={`flex flex-col border-r-gray-400 md:border-none md:border-r min-w-[50px] last:border-0 gap-2 justify-center items-center md:first:justify-start p-4 overflow-x-hidden overflow-ellipsis w-full`}
           >
             <span className="font-semibold md:hidden">
               {translateItemKeys(
@@ -76,10 +98,12 @@ const PrimaryDataItem = ({ data, type }: Props) => {
           </div>
         );
       })}
-      <div className="absolute right-3 md:top-[30%] bottom-[5%]">
+      <div className="absolute -right-9 md:top-[15%] bottom-[5%]">
         <Link
           href={`/${type}/${
-            type === "colaborators" ? (data as any).uid : (data as any).id
+            type === "colaborators"
+              ? (data as any).costumer_id
+              : (data as any).debt_id
           } `}
         >
           <FcViewDetails className="w-[48px] h-[48px]" />

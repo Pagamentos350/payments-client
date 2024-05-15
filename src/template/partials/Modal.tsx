@@ -3,7 +3,7 @@ import { Dialog } from "@headlessui/react";
 import { AiOutlineClose } from "react-icons/ai";
 import { SetStateAction, Dispatch, ReactElement } from "react";
 import BackgroundLayer from "@/components/UI/Animations/BackgroundLayer";
-import { useModals } from "@/hooks/useModals";
+import { useModals } from "@/context/ModalsContext";
 
 interface ModalProps {
   children?: ReactElement;

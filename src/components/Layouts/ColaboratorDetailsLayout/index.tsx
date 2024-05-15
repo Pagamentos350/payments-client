@@ -4,7 +4,7 @@ import ColaboratorListsFrame from "@/components/Frames/Colaborator/ColaboratorLi
 import ColaboratorRestrictedFrame from "@/components/Frames/Colaborator/ColaboratorRestrictedFrame";
 import FadeIn from "@/components/UI/Animations/FadeIn";
 import BackButton from "@/components/UI/BackButton";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/context/AuthContext";
 import { Transition } from "@headlessui/react";
 import { useState, useEffect } from "react";
 
@@ -13,8 +13,6 @@ interface Props {
 }
 
 const ColaboratorDetailsLayout = ({ user }: Props) => {
-  const { activeUserData } = useAuth();
-
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -24,7 +22,7 @@ const ColaboratorDetailsLayout = ({ user }: Props) => {
   if (!user) {
     return (
       <div className="dark:text-white justify-center items-center h-full w-full">
-        Projeto não encontrado
+        Cliente não encontrado
       </div>
     );
   }
@@ -37,9 +35,7 @@ const ColaboratorDetailsLayout = ({ user }: Props) => {
         </FadeIn>
 
         <FadeIn delay="delay-[600ms]">
-          {parseInt(activeUserData?.permissionLevel || "0") > 1 && (
-            <ColaboratorRestrictedFrame user={user} />
-          )}
+          <ColaboratorRestrictedFrame user={user} />
         </FadeIn>
 
         <FadeIn delay="delay-[600ms]">

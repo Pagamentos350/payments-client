@@ -7,6 +7,7 @@ import {
   SetStateAction,
   createContext,
   useState,
+  useContext,
 } from "react";
 
 interface IModalProvider {
@@ -40,4 +41,10 @@ export const ModalProvider = ({ children }: IModalProvider) => {
       {children}
     </ModalContext.Provider>
   );
+};
+
+export const useModals = () => {
+  const context = useContext(ModalContext);
+
+  return context;
 };

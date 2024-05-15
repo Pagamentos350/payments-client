@@ -1,4 +1,4 @@
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/context/AuthContext";
 import { AiFillEdit } from "react-icons/ai";
 
 interface Props {
@@ -6,12 +6,12 @@ interface Props {
 }
 
 const EditButton = ({ fn }: Props) => {
-  const { activeUserData } = useAuth();
-  if (parseInt(activeUserData?.permissionLevel || "0") > 1) {
+  const { user } = useAuth();
+  if ((user?.permission || 0) > 1) {
     return <AiFillEdit className="w-8 h-8 cursor-pointer" onClick={fn} />;
   }
 
   return null;
 };
 
-export default EditButton
+export default EditButton;

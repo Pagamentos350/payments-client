@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { capitalize, formatInvalidMessage } from "@/services/format";
 import SelectionFormField from "@/components/UI/FormFields/SelectionFormField";
-import { useUsers } from "@/hooks/useUsers";
+import { useUsers } from "@/context/UsersContext";
 
 interface Props {
   className?: string;

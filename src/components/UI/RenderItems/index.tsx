@@ -44,7 +44,7 @@ const RenderItems = ({
     });
   }
 
-  if (arrayItems.length > 0) {
+  if (arrayItems?.length > 0) {
     return (filteredData || arrayItems).map(itemData => (
       <PrimaryDataItem
         type={type}

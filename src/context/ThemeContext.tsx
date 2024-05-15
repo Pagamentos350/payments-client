@@ -4,6 +4,7 @@ import {
   SetStateAction,
   createContext,
   useState,
+  useContext,
 } from "react";
 
 interface IThemeProvider {
@@ -25,4 +26,10 @@ export const ThemeProvider = ({ children }: IThemeProvider) => {
       {children}
     </ThemeContext.Provider>
   );
+};
+
+export const useTheme = () => {
+  const context = useContext(ThemeContext);
+
+  return context;
 };

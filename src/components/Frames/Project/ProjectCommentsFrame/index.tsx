@@ -1,7 +1,7 @@
 import { IComments, IProjectDataType } from "@/@types";
-import { useAuth } from "@/hooks/useAuth";
-import { useProjects } from "@/hooks/useProjects";
-import { useUsers } from "@/hooks/useUsers";
+import { useAuth } from "@/context/AuthContext";
+import { useProjects } from "@/context/ProjectsContext";
+import { useUsers } from "@/context/UsersContext";
 import { formatItem } from "@/services/format";
 import { Timestamp } from "firebase/firestore";
 import { useState } from "react";

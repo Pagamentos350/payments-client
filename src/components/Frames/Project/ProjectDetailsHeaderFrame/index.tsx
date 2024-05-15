@@ -1,6 +1,6 @@
 import { IDateObj, IFilterKeyOption, IProjectDataType } from "@/@types";
 import EditButton from "@/components/Auth/EditButton";
-import { useProjects } from "@/hooks/useProjects";
+import { useProjects } from "@/context/ProjectsContext";
 import { formatItem, translateItemKeys } from "@/services/format";
 import { useState } from "react";
 import { AiOutlineProject } from "react-icons/ai";

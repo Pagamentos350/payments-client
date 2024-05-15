@@ -1,4 +1,4 @@
-import { useUsers } from "@/hooks/useUsers";
+import { useUsers } from "@/context/UsersContext";
 import UserDataItem from "@/components/UI/Items/PrimaryDataItem";
 import { IFilterOptions } from "@/@types";
 import { useEffect, useState } from "react";
@@ -17,11 +17,12 @@ const ColaboratorsLayout = () => {
 
   const [filterOptions, setFilterOptions] = useState<IFilterOptions>({
     name: "",
-    age: { ASC: null },
+    last_name: "",
+    cpf: "",
     email: "",
-    occupation: "",
-    projects: { ASC: null },
-    permissionLevel: { ASC: null },
+    phone: { ASC: null },
+    rg: "",
+    // adress: { ASC: null },
   });
 
   return (

@@ -1,4 +1,4 @@
-import { useUsers } from "@/hooks/useUsers";
+import { useUsers } from "@/context/UsersContext";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { Chart, GoogleChartWrapperChartType } from "react-google-charts";
 

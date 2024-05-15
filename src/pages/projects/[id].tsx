@@ -1,5 +1,5 @@
 import Loading from "@/components/UI/Loading";
-import { useProjects } from "@/hooks/useProjects";
+import { useProjects } from "@/context/ProjectsContext";
 import { Meta } from "@/layout/meta";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";

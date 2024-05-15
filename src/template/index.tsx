@@ -11,10 +11,10 @@ import { Inter } from "next/font/google";
 import PrivatePage from "@/components/Auth/PrivatePage";
 import { useRouter } from "next/router";
 import { publicRoutes } from "@/utils/constants";
-import { useAuth } from "@/hooks/useAuth";
-import { useTheme } from "@/hooks/useTheme";
+import { useAuth } from "@/context/AuthContext";
+import { useTheme } from "@/context/ThemeContext";
 import Modal from "./partials/Modal";
-import { useModals } from "@/hooks/useModals";
+import { useModals } from "@/context/ModalsContext";
 import dynamic from "next/dynamic";
 
 const LazyModal = dynamic(() => import("./partials/Modal"), { suspense: true });

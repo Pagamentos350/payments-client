@@ -1,8 +1,8 @@
 import { FaUserAlt, FaUserTie } from "react-icons/fa";
 import { AiOutlineProject } from "react-icons/ai";
 import { useContext } from "react";
-import { useProjects } from "@/hooks/useProjects";
-import { useUsers } from "@/hooks/useUsers";
+import { useProjects } from "@/context/ProjectsContext";
+import { useUsers } from "@/context/UsersContext";
 
 const MainNumbersFrame = () => {
   const { allUsers } = useUsers();

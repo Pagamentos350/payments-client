@@ -1,4 +1,4 @@
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/context/AuthContext";
 
 interface Props {
   userPermission?: string;
@@ -6,12 +6,9 @@ interface Props {
 }
 
 const DeleteButton = ({ userPermission = "0", fn }: Props) => {
-  const { activeUserData } = useAuth();
+  const { user } = useAuth();
 
-  if (
-    userPermission !== "3" &&
-    parseInt(activeUserData?.permissionLevel || "0") > 1
-  )
+  if (userPermission !== "3" && (user?.permission || 0) > 1)
     return (
       <div className="flex w-full justify-end mt-4 border-t-gray-300 border-t pt-4">
         <button

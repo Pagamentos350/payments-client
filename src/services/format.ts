@@ -21,37 +21,18 @@ export const getAge = (strDate: string): string | number => {
 
 export const formatItem = (
   value: IFormatItem,
-  key?: IFilterKeyOption | keyof IRestrictedDataType | "age",
-): string | null => {
+  key?: Partial<IFilterKeyOption> | keyof Partial<IRestrictedDataType> | "age",
+): string | number | null => {
   if (key) {
-    if (
-      key === "birthday" ||
-      key === "deadline" ||
-      key === "startDate" ||
-      key === "comments"
-    ) {
+    if (key.toLowerCase().indexOf("date") !== -1) {
       return (
-        new Date((value as IDateObj)?.seconds * 1000)
-          ?.toISOString()
-          ?.split("T")[0]
-          ?.split("-")
-          ?.reverse()
-          ?.join("/") || ""
+        (value as string)?.split("T")[0]?.split("-")?.reverse()?.join("/") || ""
       );
     }
     if (key === "age") {
-      return getAge(
-        new Date((value as IDateObj)?.seconds * 1000)
-          .toISOString()
-          .split("T")[0]
-          .split("-")
-          .reverse()
-          .join("/"),
-      ).toString();
+      return null;
     }
-    if (key === "projects" || key === "teamUids") {
-      return (value as string[])?.length.toString();
-    }
+
     if (key === "cpf") {
       return formatCPF(value as string);
     }
@@ -66,7 +47,9 @@ export const formatItem = (
   if (typeof value === "string") {
     return value;
   }
-
+  if (typeof value === "number") {
+    return value;
+  }
   return null;
 };
 
@@ -75,17 +58,17 @@ export const parseCamelCase = (camelStr: string): string => {
 };
 
 export const translateItemKeys = (
-  itemKey: IFilterKeyOption | "age",
+  itemKey: Partial<IFilterKeyOption> | "age" | string,
 ): string | undefined => {
   return (
     {
       email: "Email",
       name: "Nome",
-      deadline: "Prazo",
-      description: "Descrição",
-      stack: "Tecnologias",
-      teamUids: "Time",
-      startDate: "Data de Inicio",
+      debt_ids: "Débitos",
+      last_name: "Sobrenome",
+      phone: "Celular",
+      adress: "Endereço",
+      cep: "CEP",
       permissionLevel: "Nivel de Permissões",
       occupation: "Área de Atuação",
       projects: "Projetos",
@@ -96,7 +79,15 @@ export const translateItemKeys = (
       cpf: "CPF",
       rg: "RG",
       telefone: "Contato",
-    }?.[itemKey] || itemKey
+      callings: "Vezes cobradas",
+      fee: "Taxa",
+      initial_value: "Valor Inicial",
+      late_fee: "Multa por Atraso",
+      payed: "Valor Pago",
+      payment_method: "Método",
+      value: "Valor Atual",
+      initial_date: "Data de Inicio",
+    }?.[itemKey as string] || itemKey
   );
 };
 

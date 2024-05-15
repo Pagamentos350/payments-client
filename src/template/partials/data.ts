@@ -8,8 +8,8 @@ export const navigationLinks: INavLinks = [
   {
     displayName: "Detalhes",
     subpaths: [
-      { displayName: "Colaboradores", path: "/colaborators" },
-      { displayName: "Projetos", path: "/projects" },
+      { displayName: "Clientes", path: "/colaborators" },
+      // { displayName: "Projetos", path: "/projects" },
     ],
   },
 ];
@@ -18,16 +18,16 @@ export const restrictedNav: INavActions = [
   {
     displayName: "Gerenciamento",
     subActions: [
-      { displayName: "Adicionar Colaborador", action: "addcolaborator" },
-      { displayName: "Criar Projeto", action: "createprojects" },
+      { displayName: "Adicionar Cliente", action: "addcolaborator" },
+      // { displayName: "Criar Projeto", action: "createprojects" },
     ],
   },
 ];
 export const manageNav: INavActions = [
-  {
-    displayName: "Configurações",
-    subActions: [
-      { displayName: "Gerenciar Credenciais", action: "changecolaborator" },
-    ],
-  },
+  // {
+  //   displayName: "Configurações",
+  //   subActions: [
+  //     { displayName: "Gerenciar Credenciais", action: "changecolaborator" },
+  //   ],
+  // },
 ];

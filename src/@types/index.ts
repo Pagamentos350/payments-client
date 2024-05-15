@@ -51,6 +51,7 @@ export interface IImageHiperlink {
 export interface IUserType {
   email: string | null;
   uid: string | null;
+  permission: number | null;
 }
 
 export interface IRestrictedDataType {
@@ -76,7 +77,7 @@ export type IFormRegisterType = Partial<{
   ILoginType &
   ISignupType;
 
-type formStatesAction = [any | any[], Dispatch<SetStateAction<any | any[]>>]
+type formStatesAction = [any | any[], Dispatch<SetStateAction<any | any[]>>];
 
 export type IFormFieldOptions = RegisterOptions & {
   fieldType: string;
@@ -103,29 +104,46 @@ export interface IDateObj {
   nanoseconds: number;
 }
 export type IProjectDataType = {
-  id: string;
-  name: string;
-  deadline: IDateObj;
+  costumer_id: string;
+  callings: number;
+  debt_id: string;
+  value: number;
+  initial_value: number;
+  payment_method: string;
+  fee: number;
+  initial_date: Date;
+  due_dates: Date[];
+  payed: number;
+  late_fee: number;
   description: string;
-  stack: string[];
-  teamUids: string[];
-  comments: IComments[];
-  startDate: IDateObj;
-}
-
-export type IUserDataType = IUserType & {
-  permissionLevel: string;
-  occupation: string[];
-  projects: string[];
-  name: string;
-  birthday: IDateObj;
-  uid: string;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
+export type IUserDataType = { email: string } & IUserType & {
+    costumer_id: string;
+    debts_ids: string[];
+    name: string;
+    last_name: string;
+    phone: string;
+    adress: string;
+    cep: string;
+    cpf: string;
+    rg: string;
+    details: string;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+
+export type OmittedTS = "id" | "uid" | "createdAt" | "updatedAt";
+
 type IFilterKeys =
-  | ObtainKeys<Omit<IProjectDataType, "id">, string | IDateObj | Array<string> | IComments[]>
   | ObtainKeys<
-      Omit<IUserDataType, "uid">,
+      Omit<IProjectDataType, OmittedTS>,
+      string | IDateObj | Array<string> | number | Date
+    >
+  | ObtainKeys<
+      Omit<IUserDataType, OmittedTS>,
       string | IDateObj | Array<string> | null
     >;
 

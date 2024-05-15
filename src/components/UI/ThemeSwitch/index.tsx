@@ -1,4 +1,4 @@
-import { useTheme } from "@/hooks/useTheme";
+import { useTheme } from "@/context/ThemeContext";
 
 export const ThemeSwitch = () => {
   const { theme, setTheme } = useTheme();

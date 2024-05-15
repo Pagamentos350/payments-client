@@ -5,9 +5,9 @@ import { GiConfirmed } from "react-icons/gi";
 import { ImCancelCircle } from "react-icons/im";
 import SelectionFormField from "../../FormFields/SelectionFormField";
 import TinyItem from "../TinyItem";
-import { useUsers } from "@/hooks/useUsers";
+import { useUsers } from "@/context/UsersContext";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useProjects } from "@/hooks/useProjects";
+import { useProjects } from "@/context/ProjectsContext";
 
 interface Props {
   state: any | any[];
@@ -65,32 +65,35 @@ const EdittableListItems = ({ state, setState, objEntries, submit }: Props) => {
             ["projects", "teamUids"].includes(objKey) ? "flex-col" : ""
           } flex flex-wrap relative mt-8`}
         >
-          {(objValue as string[]).map((e, index) => {
-            let value: string | IUserDataType | IProjectDataType = e;
-            if (objKey === "teamUids") {
-              value = findUser(e) || e;
-            }
-            if (objKey === "projects") {
-              value = findProject(e) || e;
-            }
-            if (typeof value === "string") {
-              return <TinyItem key={index} value={value} />;
-            }
-            return (
-              <div key={index}>
-                <div>
-                  {value.name}
-                  {(value as IUserDataType)?.occupation && (
-                    <div className="flex flex-wrap">
-                      {(value as IUserDataType)?.occupation.map((e, index2) => {
-                        return <TinyItem key={index2} value={e} />;
-                      })}
-                    </div>
-                  )}
+          {Array.isArray(objValue) &&
+            (objValue as string[]).map((e, index) => {
+              let value: string | IUserDataType | IProjectDataType = e;
+              if (objKey === "teamUids") {
+                value = findUser(e) || e;
+              }
+              if (objKey === "projects") {
+                value = findProject(e) || e;
+              }
+              if (typeof value === "string") {
+                return <TinyItem key={index} value={value} />;
+              }
+              return (
+                <div key={index}>
+                  <div>
+                    {value.name}
+                    {(value as IUserDataType)?.occupation && (
+                      <div className="flex flex-wrap">
+                        {(value as IUserDataType)?.occupation.map(
+                          (e, index2) => {
+                            return <TinyItem key={index2} value={e} />;
+                          },
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
       )}
       {state !== undefined && (

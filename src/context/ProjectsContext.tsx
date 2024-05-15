@@ -3,6 +3,7 @@ import {
   Dispatch,
   ReactNode,
   SetStateAction,
+  useContext,
   useEffect,
   useState,
 } from "react";
@@ -18,7 +19,7 @@ import {
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/context/AuthContext";
 import { IProjectDataType, IUserDataType } from "@/@types";
 
 interface IProjectsProvider {
@@ -196,4 +197,10 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
       {children}
     </ProjectsContext.Provider>
   );
+};
+
+export const useProjects = () => {
+  const context = useContext(ProjectsContext);
+
+  return context;
 };

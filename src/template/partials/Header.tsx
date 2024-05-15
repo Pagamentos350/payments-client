@@ -1,13 +1,13 @@
 import { ThemeSwitch } from "@/components/UI/ThemeSwitch";
-import { useAuth } from "@/hooks/useAuth";
-import { useTheme } from "@/hooks/useTheme";
+import { useAuth } from "@/context/AuthContext";
+import { useTheme } from "@/context/ThemeContext";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import MobileMenu from "./MobileMenu";
 import CompanyLogo from "@/components/UI/CompanyLogo";
 
 const Header = () => {
-  const { logOut, activeUserData } = useAuth();
+  const { logOut, user } = useAuth();
   const [mounted, setMounted] = useState(false);
   const [mobileMenuIsOpen, setMobileMenuIsOpen] = useState<boolean>(false);
   const router = useRouter();
@@ -56,7 +56,7 @@ const Header = () => {
           </div>
         </div>
         <div className="flex gap-2">
-          Olá, {activeUserData?.name},{" "}
+          Olá, {user?.email},{" "}
           <span
             className="underline-animation-event inline-block cursor-pointer"
             onClick={handleLogout}

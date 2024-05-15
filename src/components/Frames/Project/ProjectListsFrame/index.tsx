@@ -1,9 +1,9 @@
 import { IDateObj, IProjectDataType, IUserDataType } from "@/@types";
 import DeleteButton from "@/components/Auth/DeleteButton";
 import EdittableListItems from "@/components/UI/Items/EdittableListItems";
-import { useAuth } from "@/hooks/useAuth";
-import { useProjects } from "@/hooks/useProjects";
-import { useUsers } from "@/hooks/useUsers";
+import { useAuth } from "@/context/AuthContext";
+import { useProjects } from "@/context/ProjectsContext";
+import { useUsers } from "@/context/UsersContext";
 import { useRouter } from "next/router";
 import { useState } from "react";
 

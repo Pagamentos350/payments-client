@@ -7,10 +7,19 @@ import {
   updateEmail,
   updatePassword,
 } from "firebase/auth";
-import { createContext, ReactNode, useEffect, useState } from "react";
-import { auth, db } from "../config/firebase";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { IUserDataType, IUserType } from "@/@types";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import axios from "axios";
+import { ENVS } from "@/utils/constants";
+import { deleteCookie, getCookie, setCookie } from "@/utils/cookieHandler";
+import { Router, useRouter } from "next/router";
 
 interface IAuthProvider {
   children: ReactNode;
@@ -18,121 +27,139 @@ interface IAuthProvider {
 
 interface AuthContextProps {
   user: IUserType;
-  activeUserData: IUserDataType | null;
+  activeUserToken: string | null;
   loading: boolean;
-  signUp: (email: string, password: string) => Promise<UserCredential>;
-  logIn: (email: string, password: string) => Promise<UserCredential>;
+  // signUp: (email: string, password: string) => Promise<any>;
+  logIn: (email: string, password: string) => Promise<any>;
   logOut: () => Promise<void>;
-  changeUserPassword: (newPassword: string) => Promise<void>;
-  changeUserEmail: (newEmail: string) => Promise<void>;
+  getAuthToken: () => string;
+  loadingUserCache: boolean;
+  // changeUserPassword: (newPassword: string) => Promise<void>;
+  // changeUserEmail: (newEmail: string) => Promise<void>;
 }
 
 export const AuthContext = createContext({} as AuthContextProps);
 
 export const AuthProvider = ({ children }: IAuthProvider) => {
-  const [user, setUser] = useState<IUserType>({ email: null, uid: null });
-  const [activeUserData, setActiveUserData] = useState<IUserDataType | null>(
-    null,
-  );
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loadingUserCache, setLoadingUserCache] = useState(true);
+  const [user, setUser] = useState<IUserType>({
+    email: null,
+    uid: null,
+    permission: null,
+  });
+  const [activeUserToken, setActiveUserToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
 
-  const signUp = (email: string, password: string) => {
-    return createUserWithEmailAndPassword(auth, email, password);
+  const checkToken = async (token: string) => {
+    let response;
+    try {
+      const res = await axios.get(`${ENVS.apiUrl}/authping`, {
+        headers: { Authorization: "Bearer " + token },
+      });
+      response = res.data;
+    } catch (error) {
+      console.log(error);
+    }
+
+    return response;
   };
 
-  const logIn = (email: string, password: string) => {
-    return signInWithEmailAndPassword(auth, email, password);
+  const logIn = async (email: string, password: string) => {
+    setLoading(true);
+    let error;
+
+    await axios
+      .post(
+        `http://localhost:3333/api/v1/login`,
+        { email, password },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      )
+      .then((response: any) => {
+        const res = response.data;
+        const token = res.token;
+        setCookie("_at", token, 1);
+        setUser({ email: res.email, uid: res.uid, permission: res.permission });
+      })
+      .catch(err => {
+        error = err;
+        if (err.response) {
+          console.log("Error response:", error.response);
+        } else if (error.request) {
+          console.log("Error request:", error.request);
+        } else {
+          console.log("Error message:", error.message);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+
+    console.log({ error });
+
+    return error ? error : "Login Success";
+  };
+
+  const getAuthToken = () => {
+    return getCookie("_at");
   };
 
   const logOut = async () => {
-    setUser({ email: null, uid: null });
-    await signOut(auth);
-  };
-
-  const changeUserPassword = async (newPassword: string) => {
-    const currentUser = auth.currentUser;
-
-    if (currentUser) {
-      try {
-        if (parseInt(activeUserData?.permissionLevel || "0") > 2) {
-          throw Error("Admin não pode ser alterado")
-        }
-        await updatePassword(currentUser, newPassword);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
-
-  const changeUserEmail = async (newEmail: string) => {
-    const currentUser = auth.currentUser;
-    if (currentUser) {
-      try {
-        if (parseInt(activeUserData?.permissionLevel || "0") > 2) {
-          throw Error("Admin não pode ser alterado")
-        }
-        await updateEmail(currentUser, newEmail);
-      } catch (error) {
-        console.error(error);
-      }
-    }
+    deleteCookie("_at");
+    setUser({ email: null, uid: null, permission: null });
+    router.push("/");
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, user => {
-      if (user) {
-        setUser({
-          email: user.email,
-          uid: user.uid,
-        });
-      } else {
-        setUser({ email: null, uid: null });
-      }
-    });
-    setLoading(false);
-
-    return () => unsubscribe();
-  }, []);
-
-  const getActiveUserData = async () => {
-    try {
-      let userData = null;
-      const q = query(collection(db, "usuários"), where("uid", "==", user.uid));
-
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach(doc => {
-        userData = doc.data();
-      });
-      return userData;
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
+    setLoadingUserCache(true);
     const fetcher = async () => {
-      setActiveUserData((await getActiveUserData()) as IUserDataType | null);
+      const token = getAuthToken();
+      if (token || token !== "undefined") {
+        const check: any = await checkToken(token);
+        console.log({ check });
+        if (check?.result) {
+          setUser({ email: check.user.email, uid: check.user.uid, permission: check.user.permission });
+        } else {
+          deleteCookie("_at");
+        }
+        setActiveUserToken(token);
+      } else {
+        deleteCookie("_at");
+      }
+      setLoadingUserCache(false);
     };
-    if (user) {
-      fetcher();
-    }
+
+    fetcher();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, []);
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        activeUserData,
+        activeUserToken,
         loading,
-        signUp,
+        // signUp,
         logIn,
         logOut,
-        changeUserPassword,
-        changeUserEmail,
+        getAuthToken,
+        loadingUserCache,
+        // changeUserPassword,
+        // changeUserEmail,
       }}
     >
       {children}
     </AuthContext.Provider>
   );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+
+  return context;
 };

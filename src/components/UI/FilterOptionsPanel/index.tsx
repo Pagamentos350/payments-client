@@ -1,6 +1,6 @@
 import { IFilterKeyOption, IFilterOptions } from "@/@types";
 import AddButton from "@/components/Auth/AddButton";
-import { useModals } from "@/hooks/useModals";
+import { useModals } from "@/context/ModalsContext";
 import {
   formatItem,
   sortItemsData,
@@ -20,8 +20,8 @@ const FilterOptionsPanel = ({ filterOptions, setFilterOptions }: Props) => {
 
   const handleChangeFilter = (key: string, value: string) => {
     setFilterOptions(prevState => {
-      const newState = { ...prevState };
-      newState[key as keyof IFilterOptions] = value;
+      const newState: any = { ...prevState };
+      newState[key] = value;
       return newState;
     });
   };
@@ -32,7 +32,9 @@ const FilterOptionsPanel = ({ filterOptions, setFilterOptions }: Props) => {
         <AddButton
           fn={() => {
             setModalContentKey(
-              filterOptions?.email !== undefined ? "addcolaborator" : "createprojects",
+              filterOptions?.email !== undefined
+                ? "addcolaborator"
+                : "createprojects",
             );
             setModalIsOpen(true);
           }}
@@ -57,7 +59,7 @@ const FilterOptionsPanel = ({ filterOptions, setFilterOptions }: Props) => {
           return (
             <div
               key={index}
-              className=" border-r-gray-400 md:border-none md:border-r min-w-[150px] last:border-0 flex gap-2 justify-center items-center md:first:justify-start first:min-w-[200px] p-4 overflow-x-auto w-full"
+              className=" border-r-gray-400 md:border-none md:border-r w-[150px] last:border-0 flex gap-2 justify-center items-center p-4 overflow-x-auto"
             >
               {translateItemKeys(objKey as IFilterKeyOption | "age")}
             </div>

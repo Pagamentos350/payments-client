@@ -4,12 +4,11 @@ import { useRouter } from "next/router";
 import CompanyLogo from "@/components/UI/CompanyLogo";
 import { ThemeSwitch } from "@/components/UI/ThemeSwitch";
 import NavItem from "@/components/UI/Items/NavItem";
-import { useModals } from "@/hooks/useModals";
-import { useAuth } from "@/hooks/useAuth";
+import { useModals } from "@/context/ModalsContext";
+import { useAuth } from "@/context/AuthContext";
 
 const SideMenu = () => {
   const { setModalIsOpen, setModalContentKey } = useModals();
-  const { activeUserData } = useAuth();
 
   const handleModalAction = (key: string): void => {
     setModalContentKey(key);
@@ -48,10 +47,7 @@ const SideMenu = () => {
         </ul>
         <ul className="text-lg inline-block">
           <>
-            {(parseInt(activeUserData?.permissionLevel || "0") > 1
-              ? [...manageNav, ...restrictedNav]
-              : manageNav
-            ).map((item, index) => (
+            {[...manageNav, ...restrictedNav].map((item, index) => (
               <li
                 key={index}
                 className="my-3 lg:my-0 items-center mr-4 lg:inline-block block w-full "

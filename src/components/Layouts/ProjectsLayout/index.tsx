@@ -2,7 +2,7 @@ import { IFilterOptions } from "@/@types";
 import FadeIn from "@/components/UI/Animations/FadeIn";
 import FilterOptionsPanel from "@/components/UI/FilterOptionsPanel";
 import RenderItems from "@/components/UI/RenderItems";
-import { useProjects } from "@/hooks/useProjects";
+import { useProjects } from "@/context/ProjectsContext";
 import { Transition } from "@headlessui/react";
 import { useEffect, useState } from "react";
 

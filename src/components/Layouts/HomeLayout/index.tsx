@@ -1,13 +1,13 @@
 import { IFormFieldType, ILoginType } from "@/@types";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import AuthForm from "@/components/Auth/AuthForm";
 import CompanyLogo from "@/components/UI/CompanyLogo";
 
 const HomeLayout = () => {
   const router = useRouter();
-  const { logIn, loading: userLoading } = useAuth();
+  const { logIn, loading: userLoading, activeUserToken } = useAuth();
 
   const onSubmit = async (data: ILoginType) => {
     try {
@@ -15,12 +15,16 @@ const HomeLayout = () => {
     } catch (error) {
       console.error(error);
     }
-    router.push("/dashboard");
+    router.push("/colaborators");
   };
 
   const formFields: IFormFieldType = {
     email: { required: "Email é necessário", fieldType: "email" },
-    password: { required: "Senha é necessário", fieldType: "password", fieldLabel: "Senha" },
+    password: {
+      required: "Senha é necessário",
+      fieldType: "password",
+      fieldLabel: "Senha",
+    },
   };
 
   const submitBtn = () => {
@@ -31,6 +35,12 @@ const HomeLayout = () => {
     }
     return "Submit";
   };
+
+  useEffect(() => {
+    if (activeUserToken !== null) {
+      console.log(activeUserToken);
+    }
+  }, [activeUserToken]);
 
   return (
     <div className="container mx-auto w-[300px] md:w-[380px] border-2 border-gray-400">
@@ -44,10 +54,10 @@ const HomeLayout = () => {
         formFields={formFields}
       />
       <div className="flex justify-center items-center mt-4 mb-8">
-          <small className="text-center m-auto">
-            Em caso de perda das credenciais entre em contato com um gestor
-          </small>
-        </div>
+        <small className="text-center m-auto">
+          Em caso de perda das credenciais entre em contato com um gestor
+        </small>
+      </div>
     </div>
   );
 };

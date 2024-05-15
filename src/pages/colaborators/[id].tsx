@@ -1,5 +1,5 @@
 import Loading from "@/components/UI/Loading";
-import { useUsers } from "@/hooks/useUsers";
+import { useUsers } from "@/context/UsersContext";
 import { Meta } from "@/layout/meta";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
@@ -14,7 +14,7 @@ const ColaboratorDetails = () => {
   const router = useRouter();
   const slug = router.query.id;
   const { allUsers } = useUsers();
-  const selectedUser = allUsers.find(e => e.uid === slug);
+  const selectedUser = allUsers.find(e => e.costumer_id === slug);
 
   return (
     <Suspense fallback={<Loading />}>

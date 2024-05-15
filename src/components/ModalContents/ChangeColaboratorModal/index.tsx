@@ -6,9 +6,9 @@ import {
 } from "@/@types";
 import AuthForm from "@/components/Auth/AuthForm";
 import Loading from "@/components/UI/Loading";
-import { useAuth } from "@/hooks/useAuth";
-import { useModals } from "@/hooks/useModals";
-import { useUsers } from "@/hooks/useUsers";
+import { useAuth } from "@/context/AuthContext";
+import { useModals } from "@/context/ModalsContext";
+import { useUsers } from "@/context/UsersContext";
 import { milissecondsInAYear } from "@/utils/constants";
 import { Timestamp } from "firebase/firestore";
 import router, { useRouter } from "next/router";

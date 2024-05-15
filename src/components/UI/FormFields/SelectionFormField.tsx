@@ -7,10 +7,10 @@ import {
 import TinyItem from "../Items/TinyItem";
 import { Dispatch, Fragment, SetStateAction, useEffect, useState } from "react";
 import { AiOutlineClose, AiOutlineSearch } from "react-icons/ai";
-import { useUsers } from "@/hooks/useUsers";
+import { useUsers } from "@/context/UsersContext";
 import { stringVerifier } from "@/services/errorHandler";
 import { Transition } from "@headlessui/react";
-import { useProjects } from "@/hooks/useProjects";
+import { useProjects } from "@/context/ProjectsContext";
 
 interface Props {
   type: string;

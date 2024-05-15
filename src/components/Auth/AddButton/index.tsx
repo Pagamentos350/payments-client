@@ -1,4 +1,4 @@
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/context/AuthContext";
 import { IoMdAddCircle } from "react-icons/io";
 
 interface Props {
@@ -6,12 +6,17 @@ interface Props {
 }
 
 const AddButton = ({ fn }: Props) => {
-  const { activeUserData } = useAuth();
-  if (parseInt(activeUserData?.permissionLevel || "0") > 1) {
-    return <IoMdAddCircle className="w-12 h-12 cursor-pointer text-blue-900" onClick={fn} />;
+  const { user } = useAuth();
+  if ((user?.permission || 0) > 1) {
+    return (
+      <IoMdAddCircle
+        className="w-12 h-12 cursor-pointer text-blue-900"
+        onClick={fn}
+      />
+    );
   }
 
   return null;
 };
 
-export default AddButton
+export default AddButton;
