@@ -24,6 +24,13 @@ export const formatItem = (
   key?: Partial<IFilterKeyOption> | keyof Partial<IRestrictedDataType> | "age",
 ): string | number | null => {
   if (key) {
+    if (key === "fee") {
+      return `${value}%`;
+    }
+    if (key.indexOf("value") !== -1 && typeof value === "string") {
+      return `R$${parseFloat(value).toFixed(2)?.toLocaleString()}`;
+    }
+
     if (key.toLowerCase().indexOf("date") !== -1) {
       return (
         (value as string)?.split("T")[0]?.split("-")?.reverse()?.join("/") || ""

@@ -48,7 +48,11 @@ const RenderItems = ({
     return (filteredData || arrayItems).map(itemData => (
       <PrimaryDataItem
         type={type}
-        key={type === "users" ? (itemData as any)?.uid : (itemData as any)?.id}
+        key={
+          type === "users"
+            ? (itemData as any)?.costumer_id
+            : (itemData as any)?.debt_id
+        }
         data={itemData as any}
       />
     ));

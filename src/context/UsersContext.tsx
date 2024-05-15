@@ -47,6 +47,7 @@ interface UsersContextProps {
     restricted?: boolean,
   ) => Promise<void>;
   verifyUniqueField: (uniqueValue: string, uniqueField: "email") => boolean;
+  addDebtToUser: (costumer_id: string, debt: Partial<IProjectDataType>) => void;
 }
 
 export const UsersContext = createContext({} as UsersContextProps);
@@ -136,7 +137,6 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
   const getRestrictedData = async (uid: string) => {
     try {
       const authToken = getAuthToken();
-      const user = allUsers.find(user => user.costumer_id === uid);
       const res = await axios.get(`${ENVS.apiUrl}/debts?costumer_id=${uid}`, {
         headers: { Authorization: "Bearer " + authToken },
       });
@@ -157,12 +157,42 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
     return false;
   };
 
+  const addDebtToUser = async (
+    costumer_id: string,
+    debt: Partial<IProjectDataType>,
+  ) => {
+    debt = {
+      costumer_id: costumer_id,
+      value: (debt?.initial_value || 0) * (1 + (debt?.fee || 0)),
+      initial_value: debt.initial_value,
+      payment_method: debt.payment_method,
+      fee: debt.fee,
+      initial_date: debt.initial_date,
+      due_dates: debt.due_dates,
+      payed: debt.payed,
+      late_fee: debt.late_fee,
+      callings: debt.callings,
+      description: debt.description,
+    };
+
+    try {
+      const authToken = getAuthToken();
+      const res = await axios.post(`${ENVS.apiUrl}/debts/add`, debt, {
+        headers: { Authorization: "Bearer " + authToken },
+      });
+      console.log({ res });
+    } catch (err) {
+      console.log({ err });
+    }
+  };
+
   return (
     <UsersContext.Provider
       value={{
         allUsers,
         loading,
         error,
+        addDebtToUser,
         // updateUsersProjects,
         // removingUsersProjects,
         setUpdate,

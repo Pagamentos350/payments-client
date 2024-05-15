@@ -55,6 +55,7 @@ const ColaboratorRestrictedFrame = ({ user }: Props) => {
           <FilterOptionsPanel
             filterOptions={filterOptions}
             setFilterOptions={setFilterOptions}
+            hideSearch
           />
         </div>
         <div className="w-full flex flex-col justify-center">
