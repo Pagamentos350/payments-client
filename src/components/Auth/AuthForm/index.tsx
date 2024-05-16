@@ -39,7 +39,7 @@ const AuthForm = ({
     handleSubmit,
     formState: { errors },
   } = methods;
-  
+
   const onSubmit = async (data: IFormRegisterType) => {
     const formError = formErrorsHandler(data);
     const invalidMessage: string[] = [];
@@ -99,6 +99,7 @@ const AuthForm = ({
           {...register(formName, formOptions)}
           className={`${formOptions?.inputClassName || ""} 
              ${defaultInputClass}`}
+          defaultValue={formOptions.defaultValue}
         />
       );
     }
@@ -146,6 +147,9 @@ const AuthForm = ({
             ${defaultInputClass}`}
           defaultValue={formOptions.defaultValue}
           placeholder={formOptions.placeholder}
+          step={
+            formOptions.fieldType === "number" ? formOptions.step : undefined
+          }
         />
       </div>
     );

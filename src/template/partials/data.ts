@@ -1,10 +1,10 @@
 import { INavActions, INavLinks } from "@/@types";
 
 export const navigationLinks: INavLinks = [
-  {
-    displayName: "Resumo",
-    subpaths: [{ displayName: "Painel", path: "/dashboard" }],
-  },
+  // {
+  //   displayName: "Resumo",
+  //   subpaths: [{ displayName: "Painel", path: "/dashboard" }],
+  // },
   {
     displayName: "Detalhes",
     subpaths: [

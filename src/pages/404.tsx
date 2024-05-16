@@ -18,9 +18,9 @@ const Custom404 = () => {
         </p>
         <button
           className="btn max-w-[150px] text-white"
-          onClick={() => router.push("/dashboard")}
+          onClick={() => router.push("/colaborators")}
         >
-          Voltar para o painel
+          Voltar
         </button>
       </div>
     </>

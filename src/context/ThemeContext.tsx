@@ -5,6 +5,7 @@ import {
   createContext,
   useState,
   useContext,
+  useEffect,
 } from "react";
 
 interface IThemeProvider {
@@ -20,6 +21,15 @@ export const ThemeContext = createContext({} as ThemeContextProps);
 
 export const ThemeProvider = ({ children }: IThemeProvider) => {
   const [theme, setTheme] = useState<"dark" | "light">("light");
+
+  useEffect(() => {
+    const preferedTheme: string =
+      localStorage?.getItem("theme-prefered") || "light";
+    setTheme(preferedTheme as "dark" | "light");
+  }, []);
+  useEffect(() => {
+    localStorage?.setItem("theme-prefered", theme);
+  }, [theme]);
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>

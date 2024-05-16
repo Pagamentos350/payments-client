@@ -39,49 +39,59 @@ const CreateProjectModal = () => {
       fieldLabel: "Valor Inicial (R$)",
       fieldType: "text",
       divClassName: "col-start-1 col-end-3",
+      defaultValue: String(debtData?.initial_value || 0),
     },
     description: {
       fieldType: "textarea",
       fieldLabel: "Descrição",
       divClassName: "col-start-1 col-end-4 row-start-2 row-end-6",
       inputClassName: "max-h-32",
+      defaultValue: String(debtData?.description || ""),
     },
     fee: {
       required: "Taxa é necessário",
       fieldLabel: "Taxa (%)",
       fieldType: "number",
-      defaultValue: "0",
+      defaultValue: String(debtData?.fee || 0),
+      min: "0",
+      step: "0.01",
     },
     initial_date: {
       required: "Data de Inicio é necessário",
       fieldType: "date",
       fieldLabel: "Data de Inicio",
-      defaultValue: Date.now().toString(),
+      defaultValue:
+        (debtData?.initial_date as unknown as string) ||
+        new Date(Date.now()).toISOString(),
     },
     due_dates: {
       required: "Prazos é necessário",
       fieldType: "date",
       fieldLabel: "Prazos",
+      defaultValue: String(debtData?.due_dates || ""),
     },
     payed: {
       fieldLabel: "Pago adiatado (R$)",
       fieldType: "number",
-      defaultValue: "0",
+      defaultValue: String(debtData?.payed || 0),
     },
     late_fee: {
       fieldLabel: "Multa por atraso (R$)",
       required: "Multa por Atraso é necessario",
-      fieldType: "string",
+      fieldType: "number",
+      step: "0.01",
+      defaultValue: String(debtData?.late_fee || 0),
     },
     callings: {
       fieldLabel: "Cobranças",
       required: "Cobraças é necessario",
       fieldType: "number",
-      defaultValue: "0",
+      defaultValue: String(debtData?.callings || 0),
     },
     payment_debt: {
       fieldLabel: "Método de Pagamento",
       fieldType: "string",
+      defaultValue: String(debtData?.payment_method || ""),
     },
   };
 
@@ -96,18 +106,32 @@ const CreateProjectModal = () => {
 
   if (confirmation) {
     return (
-      <div className="flex flex-col h-full justify-center items-center mx-auto text-[26px]">
-        <div className="grid grid-cols-2 grid-flow-row">
+      <div className="flex flex-col h-full justify-center items-center md:mx-auto text-[26px] dark:text-white">
+        <div>
+          <h4 className="text-center">Confirme os dados</h4>
+        </div>
+        <div className="md:grid md:grid-cols-2 grid-flow-row gap-4 my-4  overflow-y-auto">
           {Object.entries(debtData).map(([objEntry, objValue], i) => {
             return (
               <div key={i}>
-                <div>
-                  {translateItemKeys(objEntry)}:
-                  {formatItem(String(objValue), objEntry as any)}
+                <div className="flex flex-col md:flex-row">
+                  <span>{translateItemKeys(objEntry)}:</span>{" "}
+                  <span className="!font-light">
+                    {formatItem(String(objValue), objEntry as any)}
+                  </span>
                 </div>
               </div>
             );
           })}
+        </div>
+        <div className="flex gap-3">
+          <button
+            className="btn !bg-transparent"
+            onClick={() => setConfirmation(false)}
+          >
+            Cancel
+          </button>
+          <button className="btn">Confirm</button>
         </div>
       </div>
     );

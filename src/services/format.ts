@@ -49,6 +49,7 @@ export const formatItem = (
     if (key === "workType") {
       return (value as string).toUpperCase();
     }
+    if (typeof value === "string") return value;
   }
 
   if (typeof value === "string") {

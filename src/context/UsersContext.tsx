@@ -46,7 +46,10 @@ interface UsersContextProps {
     user: Partial<IUserDataType & ISignupType>,
     restricted?: boolean,
   ) => Promise<void>;
-  verifyUniqueField: (uniqueValue: string, uniqueField: "email") => boolean;
+  verifyUniqueField: (
+    uniqueValue: string,
+    uniqueField: "email" | "cpf" | "rg",
+  ) => boolean;
   addDebtToUser: (costumer_id: string, debt: Partial<IProjectDataType>) => void;
 }
 
@@ -146,7 +149,10 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
       console.error(error);
     }
   };
-  const verifyUniqueField = (uniqueValue: string, uniqueField: "email") => {
+  const verifyUniqueField = (
+    uniqueValue: string,
+    uniqueField: "email" | "cpf" | "rg",
+  ) => {
     try {
       const user = allUsers.find(user => user?.[uniqueField] === uniqueValue);
 

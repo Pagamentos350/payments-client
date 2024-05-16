@@ -88,6 +88,7 @@ export type IFormFieldOptions = RegisterOptions & {
   divClassName?: string;
   placeholder?: string;
   defaultValue?: string;
+  step?: string | number;
   _formStates?: formStatesAction;
 };
 
