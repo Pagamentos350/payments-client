@@ -30,6 +30,7 @@ const PrimaryDataItem = ({ data, type }: Props) => {
       !Array.isArray(objValue) ||
       ["projects", "teamUids"].includes(objKey as string)
     ) {
+
       return formatItem(objValue, objKey);
     }
 
@@ -43,10 +44,6 @@ const PrimaryDataItem = ({ data, type }: Props) => {
           ))}
         </div>
       );
-    }
-
-    if (objValue < 1) {
-      return `${objValue * 100}%`;
     }
 
     return objValue;
@@ -81,20 +78,17 @@ const PrimaryDataItem = ({ data, type }: Props) => {
               (data as any)?.uid || (data as any)?.id
             }-${objKey}-${index}`}
             style={{ overflowWrap: "anywhere" }}
-            className={`flex flex-col border-r-gray-400 md:border-none md:border-r min-w-[50px] last:border-0 gap-2 justify-center items-center md:first:justify-start p-4 overflow-x-hidden overflow-ellipsis w-full`}
+            className={`flex flex-col border-r-gray-400 md:border-none md:border-r min-w-[50px] last:border-0 gap-2 justify-center items-center p-4 overflow-x-hidden overflow-ellipsis w-full`}
           >
             <span className="font-semibold md:hidden">
-              {translateItemKeys(
-                (objKey === "birthday" ? "age" : objKey) as
-                  | IFilterKeyOption
-                  | "age",
-              )}
-              :
+              {translateItemKeys(objKey)}:
             </span>
-            {renderValue(
-              objKey as IFilterKeyOption | "age" | undefined,
-              objValue as IFormatItem,
-            )}
+            <span className="min-w-[100px] text-center">
+              {renderValue(
+                objKey as IFilterKeyOption | "age" | undefined,
+                objValue as IFormatItem,
+              )}
+            </span>
           </div>
         );
       })}

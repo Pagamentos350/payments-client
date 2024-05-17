@@ -27,8 +27,14 @@ export const formatItem = (
     if (key === "fee") {
       return `${value}%`;
     }
-    if (key.indexOf("value") !== -1 && typeof value === "string") {
-      return `R$${parseFloat(value).toFixed(2)?.toLocaleString()}`;
+    if (
+      key.indexOf("value") !== -1 &&
+      (typeof value === "string" || typeof value === "number")
+    ) {
+      if (typeof value === "string")
+        return `R$${parseFloat(value).toFixed(2)?.toLocaleString()}`;
+      else if (typeof value === "number")
+        return `R$${value.toFixed(2)?.toLocaleString()}`;
     }
 
     if (key.toLowerCase().indexOf("date") !== -1) {

@@ -58,7 +58,7 @@ const FilterOptionsPanel = ({
           </div>
         )}
       </div>
-      <div className="hidden md:flex w-[90%] shadow-2xl md:shadow-none md:border-t-0 md:border-x-0 md:rounded-none border border-grey-200 md:!border-b md:!border-b-gray-300 rounded-[15px] flex-col md:flex-row justify-between text-lg mx-auto hover:dark:bg-gray-900">
+      <div className="hidden md:flex w-[90%] shadow-2xl md:shadow-none md:border-t-0 md:border-x-0 md:rounded-none border border-grey-200 md:!border-b md:!border-b-gray-300 rounded-[15px] flex-col md:flex-row justify-around text-lg mx-auto hover:dark:bg-gray-900">
         {sortedData.map(([objKey], index) => {
           if (["id", "uid"].includes(objKey)) {
             return null;
@@ -66,7 +66,7 @@ const FilterOptionsPanel = ({
           return (
             <div
               key={index}
-              className="overflow-hidden border-r-gray-400 md:border-none md:border-r w-[150px] last:border-0 flex gap-2 justify-center items-center p-4"
+              className="overflow-hidden border-r-gray-400 md:border-none md:border-r min-w-[100px] last:border-0 flex gap-2 justify-center items-center p-4"
             >
               {translateItemKeys(objKey as IFilterKeyOption | "age")}
             </div>

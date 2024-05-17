@@ -35,9 +35,9 @@ export const formErrorsHandler = ({
     if (cadastroDePessoaFisica?.length !== 11 && cpf?.length !== 11) {
       return "CPF precisa ter 11 digitos";
     }
-    if (!validarCPF(cadastroDePessoaFisica || cpf)) {
-      return "CPF inválido";
-    }
+    // if (!validarCPF(cadastroDePessoaFisica || cpf)) {
+    //   return "CPF inválido";
+    // }
   }
   if (
     (rg && (rg.length > 9 || rg.length < 7))

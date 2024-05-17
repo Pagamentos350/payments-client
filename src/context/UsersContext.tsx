@@ -38,9 +38,7 @@ interface UsersContextProps {
   setUpdate: Dispatch<SetStateAction<boolean>>;
   findUser: (uid: string) => IUserDataType | undefined;
   getRestrictedData: (uid: string) => Promise<IRestrictedDataType | undefined>;
-  createUser: (
-    user: IUserDataType & ISignupType & IRestrictedDataType,
-  ) => Promise<void>;
+  createUser: (user: Partial<IUserDataType>) => Promise<void>;
   deleteUser: (uid: string) => Promise<void>;
   updateUser: (
     user: Partial<IUserDataType & ISignupType>,
@@ -78,9 +76,7 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
     setUpdate(e => !e);
   };
 
-  const createUser = async (
-    user: IUserDataType & ISignupType & IRestrictedDataType,
-  ) => {
+  const createUser = async (user: Partial<IUserDataType>) => {
     try {
       const authToken = getAuthToken();
       await axios.post(`${ENVS.apiUrl}/costumers/add`, user, {
@@ -156,7 +152,7 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
     try {
       const user = allUsers.find(user => user?.[uniqueField] === uniqueValue);
 
-      return !!user;
+      return Boolean(user);
     } catch (error) {
       console.error(error);
     }

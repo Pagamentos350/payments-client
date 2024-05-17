@@ -47,7 +47,7 @@ const ColaboratorRestrictedFrame = ({ user }: Props) => {
   }, []);
 
   return (
-    <div className="frame-container">
+    <div className="frame-container !w-full">
       <div className="w-full flex flex-col justify-center mt-12">
         <div className="">
           <FilterOptionsPanel

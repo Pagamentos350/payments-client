@@ -1,5 +1,6 @@
 import {
   IFormFieldType,
+  IProjectDataType,
   IRestrictedDataType,
   ISignupType,
   IUserDataType,
@@ -8,72 +9,55 @@ import AuthForm from "@/components/Auth/AuthForm";
 import Loading from "@/components/UI/Loading";
 import { useModals } from "@/context/ModalsContext";
 import { useUsers } from "@/context/UsersContext";
+import { translateItemKeys, formatItem } from "@/services/format";
 import { milissecondsInAYear } from "@/utils/constants";
 import { Timestamp } from "firebase/firestore";
 import router, { useRouter } from "next/router";
 import { useState } from "react";
 
 const CreateColaboratorModal = () => {
-  const { loading, createUser, error } = useUsers();
-  const [occupation, setOccupation] = useState<string[]>([]);
-  const [workType, setWorkType] = useState<string[]>([]);
-  const [submitted, setSubmitted] = useState(false);
-  const router = useRouter();
-  const { setModalIsOpen } = useModals();
+  const {
+    createUser,
+    loading,
+    error,
+    setUpdate: setUpdateProjects,
+  } = useUsers();
 
-  const onSubmit = async (
-    data: Partial<
-      IUserDataType &
-        ISignupType &
-        IRestrictedDataType & {
-          registroGeral: string;
-          cadastroDePessoaFisica: string;
-          senha: string;
-          contato: string;
-        }
-    >,
-  ) => {
-    setSubmitted(true);
-    const {
-      name,
-      contato: telefone,
-      registroGeral: rg,
-      cadastroDePessoaFisica: cpf,
-      email,
-      senha: password,
-    } = data;
-    const newUser: any = {
-      name,
-      telefone,
-      rg,
-      cpf,
-      email,
-      password,
-    };
-    newUser.birthday = Timestamp.fromDate(new Date(newUser.birthday));
-    newUser.occupation = occupation;
-    newUser.workType = workType[0];
-    newUser.projects = [];
+  const [submitted, setSubmitted] = useState(false);
+  const [confirmation, setConfirmation] = useState<boolean>(false);
+  const [costumerData, setcostumerData] = useState<Partial<IUserDataType>>({});
+
+  const onSubmit = async (data: any) => {
+    console.log({ data });
+
+    setcostumerData(data);
+    setConfirmation(true);
+  };
+
+  const sendUpdate = async () => {
+    console.log({ costumerData });
+
     try {
-      await createUser(newUser);
-      if (router.pathname !== "/colaborators") {
-        router.push("/colaborators");
-      }
-    } catch (error) {
-      console.error(error);
+      createUser(costumerData);
+
+      setConfirmation(false);
+      setSubmitted(true);
+    } catch (err) {
+      console.log(err);
     }
-    return setModalIsOpen(false);
   };
 
   const formFields: IFormFieldType = {
     name: {
       required: "Nome é necessário",
       fieldType: "text",
+      defaultValue: costumerData?.name || "",
     },
     last_name: {
       fieldType: "text",
       fieldLabel: "Sobrenome",
       required: "Sobrenome é necessário",
+      defaultValue: costumerData?.last_name || "",
     },
     phone: {
       fieldType: "number",
@@ -81,17 +65,20 @@ const CreateColaboratorModal = () => {
       min: 9999999999,
       max: 99999999999,
       required: "Celular é necessário",
+      defaultValue: costumerData?.phone || "",
     },
     adress: {
       required: "Endereço",
       fieldType: "text",
       fieldLabel: "Endereço",
       divClassName: "row-start-2 row-end-3",
+      defaultValue: costumerData?.adress || "",
     },
     cep: {
       required: "CEP é necessário",
       fieldType: "text",
       fieldLabel: "CEP",
+      defaultValue: costumerData?.cep || "",
     },
     rg: {
       required: "RG é necessário",
@@ -99,23 +86,26 @@ const CreateColaboratorModal = () => {
       fieldLabel: "RG",
       minLength: 7,
       maxLength: 7,
+      defaultValue: costumerData?.rg || "",
     },
     cpf: {
       required: "CPF é necessário",
-      fieldType: "number",
+      fieldType: "text",
       fieldLabel: "CPF",
       minLength: 11,
       maxLength: 11,
+      defaultValue: costumerData?.cpf || "",
     },
     email: {
       required: "Email é necessária",
       fieldType: "email",
+      defaultValue: costumerData?.email || "",
     },
     details: {
       fieldType: "textarea",
       fieldLabel: "Detalhes",
       divClassName: "col-start-1 col-end-5",
-
+      defaultValue: costumerData?.details || "",
     },
   };
 
@@ -131,20 +121,54 @@ const CreateColaboratorModal = () => {
   const renderFormContent = () => {
     if (loading) return <Loading />;
 
+    if (confirmation) {
+      return (
+        <div className="flex flex-col h-full justify-center items-center md:mx-auto text-[26px] dark:text-white">
+          <div>
+            <h4 className="text-center">Confirme os dados</h4>
+          </div>
+          <div className="md:grid md:grid-cols-2 grid-flow-row gap-4 my-4  overflow-y-auto">
+            {Object.entries(costumerData).map(([objEntry, objValue], i) => {
+              return (
+                <div key={i}>
+                  <div className="flex flex-col md:flex-row gap-4">
+                    <span>{translateItemKeys(objEntry)}:</span>
+                    <span className="!font-light">
+                      {formatItem(String(objValue), objEntry as any)}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="flex gap-3 flex-col md:flex-row">
+            <button
+              className="btn !bg-transparent"
+              onClick={() => setConfirmation(false)}
+            >
+              Cancel
+            </button>
+            <button className="btn" onClick={sendUpdate}>
+              Confirm
+            </button>
+          </div>
+        </div>
+      );
+    }
+
     if (submitted)
       return (
         <div className="flex flex-col w-full h-full justify-center items-center mx-auto text-[26px]">
-          <div>{error ? error : "Usuário Criado com Sucesso"}</div>
+          <div>{error ? error : "Cliente Criado com Sucesso"}</div>
         </div>
       );
 
     return (
       <AuthForm
         className="w-full flex justify-center items-start flex-col h-full md:items-start md:grid md:grid-cols-4 md:gap-x-4"
-        handleOnSubmit={onSubmit as any}
+        handleOnSubmit={onSubmit}
         submitBtn={submitBtn}
         formFields={formFields}
-        disabled={loading}
       />
     );
   };
@@ -152,7 +176,7 @@ const CreateColaboratorModal = () => {
   return (
     <div className="container mx-auto min-w-[250px] md:-w-[800px] w-[300px] lg:min-w-[1000px]">
       <h2 className="px-12 mt-8 text-center text-2xl font-semibold text-blue-900 dark:text-white">
-        Adicionar Colaborador
+        Adicionar Cliente
       </h2>
       <div className="max-h-[80vh] overflow-y-scroll md:overflow-y-auto md:min-h-[60vh] flex justify-center items-start">
         {renderFormContent()}

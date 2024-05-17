@@ -41,39 +41,34 @@ const AuthForm = ({
   } = methods;
 
   const onSubmit = async (data: IFormRegisterType) => {
+    console.log("test1", { data });
     const formError = formErrorsHandler(data);
     const invalidMessage: string[] = [];
-    if (data.registroGeral) {
-      invalidMessage.push(
-        (await verifyUniqueField(data.registroGeral, "rg")) ? "RG" : "",
-      );
+    if (data.rg) {
+      verifyUniqueField(data.rg, "rg") && invalidMessage.push("RG");
     }
-    if (data.email && data.password_confirm) {
-      invalidMessage.push(
-        (await verifyUniqueField(data.email, "email")) ? "Email" : "",
-      );
+    if (data.email) {
+      verifyUniqueField(data.email, "email") && invalidMessage.push("Email");
     }
-    if (data.cadastroDePessoaFisica) {
-      invalidMessage.push(
-        (await verifyUniqueField(data.cadastroDePessoaFisica, "cpf"))
-          ? "CPF"
-          : "",
-      );
+    if (data.cpf) {
+      verifyUniqueField(data.cpf, "cpf") && invalidMessage.push("CPF");
     }
 
-    setError(
-      invalidMessage.length > 0
-        ? invalidMessage.join(" já cadastrado. ")
-        : null,
-    );
-    if (!formError) {
+    console.log({ invalidMessage });
+
+    console.log({ formError });
+    if (!formError && invalidMessage.length < 1) {
       try {
         await handleOnSubmit(data);
       } catch (error: any) {
-        setError(firebaseAuthErrorsHandler(error.errors[0].message));
+        console.log({ error });
+
+        setError(error?.errors?.[0]?.message);
       }
     } else {
-      setError(formError);
+      if (formError) setError(formError);
+      if (invalidMessage.length > 0)
+        setError(invalidMessage.join(" ") + " já cadastrado.");
     }
   };
 
@@ -201,12 +196,13 @@ const AuthForm = ({
         ))}
         <div className="flex flex-col items-center justify-center pt-8 col-span-full">
           <div className="block min-h-8">
-            {error && <small className="form-error ">{error}</small>}
+            {error && (
+              <small className="form-error dark:!text-red-500 ">{error}</small>
+            )}
           </div>
           <button
             type="submit"
             className={`btn disabled:!bg-gray-400 max-w-[200px]`}
-            disabled={disabled || !!error}
           >
             <div className="capitalize text-white font-normal">
               {submitBtn()}
