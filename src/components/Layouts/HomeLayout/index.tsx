@@ -54,7 +54,7 @@ const HomeLayout = () => {
         formFields={formFields}
       />
       <div className="flex justify-center items-center mt-4 mb-8">
-        <small className="text-center m-auto">
+        <small className="text-center m-auto text-white">
           Em caso de perda das credenciais entre em contato com um gestor
         </small>
       </div>

@@ -37,7 +37,6 @@ const CreateColaboratorModal = () => {
     const {
       name,
       contato: telefone,
-      birthday,
       registroGeral: rg,
       cadastroDePessoaFisica: cpf,
       email,
@@ -46,7 +45,6 @@ const CreateColaboratorModal = () => {
     const newUser: any = {
       name,
       telefone,
-      birthday,
       rg,
       cpf,
       email,
@@ -72,44 +70,37 @@ const CreateColaboratorModal = () => {
       required: "Nome é necessário",
       fieldType: "text",
     },
-    contato: {
+    last_name: {
+      fieldType: "text",
+      fieldLabel: "Sobrenome",
+      required: "Sobrenome é necessário",
+    },
+    phone: {
       fieldType: "number",
-      fieldLabel: "Telefone com DDD",
-      minLength: 11,
-      maxLength: 11,
-      required: "Telefone é necessário",
+      fieldLabel: "Celular (whatsapp)",
+      min: 9999999999,
+      max: 99999999999,
+      required: "Celular é necessário",
     },
-    birthday: {
-      required: "Dia da Nascimento o é necessário",
-      fieldType: "date",
-      fieldLabel: "Dia de Nascimento",
-      defaultValue: new Date(Date.now() - 18 * milissecondsInAYear)
-        .toISOString()
-        .split("T")[0],
-    },
-
-    occupation: {
-      required: "Selecionar Area de Atuação",
-      fieldType: "selection",
-      fieldLabel: "Área de Atuação",
-      _formStates: [occupation, setOccupation],
+    adress: {
+      required: "Endereço",
+      fieldType: "text",
+      fieldLabel: "Endereço",
       divClassName: "row-start-2 row-end-3",
     },
-    workType: {
-      required: "Regime de Trabalho",
-      fieldType: "selection",
-      fieldLabel: "Regime de Trabalho",
-      _formStates: [workType, setWorkType],
-      divClassName: "row-start-2 row-end-3",
+    cep: {
+      required: "CEP é necessário",
+      fieldType: "text",
+      fieldLabel: "CEP",
     },
-    registroGeral: {
+    rg: {
       required: "RG é necessário",
       fieldType: "number",
       fieldLabel: "RG",
       minLength: 7,
-      maxLength: 9,
+      maxLength: 7,
     },
-    cadastroDePessoaFisica: {
+    cpf: {
       required: "CPF é necessário",
       fieldType: "number",
       fieldLabel: "CPF",
@@ -120,19 +111,11 @@ const CreateColaboratorModal = () => {
       required: "Email é necessária",
       fieldType: "email",
     },
-    senha: {
-      required: "Senha é necessária",
-      fieldType: "password",
-      fieldLabel: "Senha",
-      minLength: 6,
-      maxLength: 32,
-    },
-    password_confirm: {
-      required: "Senhas não são iguais",
-      fieldType: "password",
-      fieldLabel: "Confirmar Senha",
-      minLength: 6,
-      maxLength: 32,
+    details: {
+      fieldType: "textarea",
+      fieldLabel: "Detalhes",
+      divClassName: "col-start-1 col-end-5",
+
     },
   };
 

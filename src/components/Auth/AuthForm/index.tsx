@@ -148,7 +148,17 @@ const AuthForm = ({
           defaultValue={formOptions.defaultValue}
           placeholder={formOptions.placeholder}
           step={
-            formOptions.fieldType === "number" ? formOptions.step : undefined
+            formOptions?.fieldType === "number" ? formOptions?.step : undefined
+          }
+          min={
+            formOptions?.fieldType === "number"
+              ? (formOptions?.min as unknown as number)
+              : undefined
+          }
+          max={
+            formOptions?.fieldType === "number"
+              ? (formOptions?.max as unknown as number)
+              : undefined
           }
         />
       </div>

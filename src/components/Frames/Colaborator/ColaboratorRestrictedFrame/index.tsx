@@ -46,8 +46,6 @@ const ColaboratorRestrictedFrame = ({ user }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const { updateUser } = useUsers();
-
   return (
     <div className="frame-container">
       <div className="w-full flex flex-col justify-center mt-12">

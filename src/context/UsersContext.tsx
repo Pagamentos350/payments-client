@@ -167,9 +167,10 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
     costumer_id: string,
     debt: Partial<IProjectDataType>,
   ) => {
+    setLoading(true);
     debt = {
       costumer_id: costumer_id,
-      value: (debt?.initial_value || 0) * (1 + (debt?.fee || 0)),
+      value: debt.value,
       initial_value: debt.initial_value,
       payment_method: debt.payment_method,
       fee: debt.fee,
@@ -186,10 +187,12 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
       const res = await axios.post(`${ENVS.apiUrl}/debts/add`, debt, {
         headers: { Authorization: "Bearer " + authToken },
       });
-      console.log({ res });
+      setUpdate(e => !e);
     } catch (err) {
       console.log({ err });
+      setError(err);
     }
+    setLoading(true);
   };
 
   return (

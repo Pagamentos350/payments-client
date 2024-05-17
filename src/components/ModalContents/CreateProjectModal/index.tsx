@@ -1,25 +1,21 @@
 import { IFormFieldType, IProjectDataType } from "@/@types";
 import AuthForm from "@/components/Auth/AuthForm";
-import CompanyLogo from "@/components/UI/CompanyLogo";
 import Loading from "@/components/UI/Loading";
-import { useAuth } from "@/context/AuthContext";
-import { useModals } from "@/context/ModalsContext";
 import { useProjects } from "@/context/ProjectsContext";
 import { useUsers } from "@/context/UsersContext";
 import { formatItem, translateItemKeys } from "@/services/format";
-import { Timestamp } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 const CreateProjectModal = () => {
   const {
-    sendNewProject,
+    addDebtToUser,
     loading: projectsLoading,
     error: projectsError,
     setUpdate: setUpdateProjects,
-  } = useProjects();
-  const { addDebtToUser } = useUsers();
+  } = useUsers();
+  const router = useRouter();
 
   const [submitted, setSubmitted] = useState(false);
   const [dueDates, setDueDates] = useState<Date[]>([]);
@@ -28,9 +24,40 @@ const CreateProjectModal = () => {
 
   const onSubmit = async (data: any) => {
     console.log({ data });
-    data.value = data.initial_value * (1 + data.fee / 100);
+    data.value = Number(data.initial_value) * (1 + Number(data.fee) / 100);
+
     setDebtData(data);
     setConfirmation(true);
+  };
+
+  const sendUpdate = async () => {
+    const tempDebtData: Partial<IProjectDataType> = JSON.parse(
+      JSON.stringify(debtData),
+    );
+    const queryId = router.asPath.split("/").pop();
+    const formatedDebtData: any = {
+      callings: Number(tempDebtData.callings),
+      debt_id: tempDebtData.debt_id,
+      value: Number(tempDebtData.value),
+      initial_value: Number(tempDebtData.initial_value),
+      payment_method: tempDebtData.payment_method,
+      fee: Number(tempDebtData.fee),
+      initial_date: new Date(tempDebtData.initial_date as unknown as string),
+      due_dates: [new Date(tempDebtData.due_dates as unknown as string)],
+      payed: Number(tempDebtData.payed),
+      late_fee: Number(tempDebtData.late_fee),
+      description: tempDebtData.description,
+    };
+
+    if (queryId) {
+      try {
+        addDebtToUser(queryId, formatedDebtData);
+        setConfirmation(false);
+        setSubmitted(true);
+      } catch (err) {
+        console.log(err);
+      }
+    } else console.log("Costumer Id not found");
   };
 
   const formFields: IFormFieldType = {
@@ -62,13 +89,15 @@ const CreateProjectModal = () => {
       fieldLabel: "Data de Inicio",
       defaultValue:
         (debtData?.initial_date as unknown as string) ||
-        new Date(Date.now()).toISOString(),
+        new Date(Date.now()).toLocaleDateString("en-CA"),
     },
     due_dates: {
       required: "Prazos é necessário",
       fieldType: "date",
       fieldLabel: "Prazos",
-      defaultValue: String(debtData?.due_dates || ""),
+      defaultValue: new Date(
+        (debtData?.due_dates as unknown as Date) || Date.now(),
+      )?.toLocaleDateString("en-CA"),
     },
     payed: {
       fieldLabel: "Pago adiatado (R$)",
@@ -88,7 +117,7 @@ const CreateProjectModal = () => {
       fieldType: "number",
       defaultValue: String(debtData?.callings || 0),
     },
-    payment_debt: {
+    payment_method: {
       fieldLabel: "Método de Pagamento",
       fieldType: "string",
       defaultValue: String(debtData?.payment_method || ""),
@@ -104,47 +133,49 @@ const CreateProjectModal = () => {
     return "Submit";
   };
 
-  if (confirmation) {
-    return (
-      <div className="flex flex-col h-full justify-center items-center md:mx-auto text-[26px] dark:text-white">
-        <div>
-          <h4 className="text-center">Confirme os dados</h4>
-        </div>
-        <div className="md:grid md:grid-cols-2 grid-flow-row gap-4 my-4  overflow-y-auto">
-          {Object.entries(debtData).map(([objEntry, objValue], i) => {
-            return (
-              <div key={i}>
-                <div className="flex flex-col md:flex-row">
-                  <span>{translateItemKeys(objEntry)}:</span>{" "}
-                  <span className="!font-light">
-                    {formatItem(String(objValue), objEntry as any)}
-                  </span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-        <div className="flex gap-3">
-          <button
-            className="btn !bg-transparent"
-            onClick={() => setConfirmation(false)}
-          >
-            Cancel
-          </button>
-          <button className="btn">Confirm</button>
-        </div>
-      </div>
-    );
-  }
-
   const renderFormContent = () => {
     if (projectsLoading) return <Loading />;
+
+    if (confirmation) {
+      return (
+        <div className="flex flex-col h-full justify-center items-center md:mx-auto text-[26px] dark:text-white">
+          <div>
+            <h4 className="text-center">Confirme os dados</h4>
+          </div>
+          <div className="md:grid md:grid-cols-2 grid-flow-row gap-4 my-4  overflow-y-auto">
+            {Object.entries(debtData).map(([objEntry, objValue], i) => {
+              return (
+                <div key={i}>
+                  <div className="flex flex-col md:flex-row gap-4">
+                    <span>{translateItemKeys(objEntry)}:</span>
+                    <span className="!font-light">
+                      {formatItem(String(objValue), objEntry as any)}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="flex gap-3 flex-col md:flex-row">
+            <button
+              className="btn !bg-transparent"
+              onClick={() => setConfirmation(false)}
+            >
+              Cancel
+            </button>
+            <button className="btn" onClick={sendUpdate}>
+              Confirm
+            </button>
+          </div>
+        </div>
+      );
+    }
 
     if (submitted)
       return (
         <div className="flex flex-col h-full justify-center items-center mx-auto text-[26px]">
           <div>
-            {projectsError ? projectsError : "Projeto Criado com Sucesso"}
+            {projectsError ? projectsError : "Débito Criado com Sucesso"}
           </div>
         </div>
       );
