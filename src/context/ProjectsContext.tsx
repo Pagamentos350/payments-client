@@ -44,7 +44,6 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
   };
 
   const updateProjects = async (projectPart: Partial<IProjectDataType>) => {
-    setLoading(true);
     try {
       const authToken = getAuthToken();
       await axios.post(`${ENVS.apiUrl}/debts/update`, projectPart, {
@@ -54,7 +53,6 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
       setError(error);
       console.error(error);
     }
-    setLoading(false);
     setUpdate(e => !e);
   };
 

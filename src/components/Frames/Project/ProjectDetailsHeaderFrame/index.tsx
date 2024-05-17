@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { AiOutlineProject } from "react-icons/ai";
 import { ImCancelCircle } from "react-icons/im";
 import { GiConfirmed } from "react-icons/gi";
+import { SiCashapp } from "react-icons/si";
 
 interface Props {
   project: IProjectDataType;
@@ -62,11 +63,11 @@ const ProjectDetailsHeaderFrame = ({ project }: Props) => {
   return (
     <div className="frame-container">
       <div className="w-full">
-        <div className="flex justify-start items-center">
-          <AiOutlineProject className="h-24 w-24" />
+        <div className="flex justify-start items-center gap-4">
+          <SiCashapp className="h-24 w-24" />
           {!edittables?.value && (
             <h3 className="font-bold text-[26px] w-[60%] relative">
-              {edittables?.value || project?.value}{" "}
+              {edittables?.value || formatItem(project?.value, "value")}{" "}
             </h3>
           )}
           {edittables?.value && (
@@ -133,7 +134,7 @@ const ProjectDetailsHeaderFrame = ({ project }: Props) => {
         <div className="grid md:grid-cols-2 grid-cols-1 justify-evenly gap-4  border-t-gray-300 border-t mt-4">
           {Object.entries({
             initial_date: project.initial_date,
-            due_dates: project?.due_dates?.[0],
+            due_dates: project?.due_dates?.[project?.callings],
             initial_value: project?.initial_value,
             fee: project.fee,
             late_fee: project.late_fee,
@@ -149,16 +150,18 @@ const ProjectDetailsHeaderFrame = ({ project }: Props) => {
                 {!edittables?.[objKey as keyof IProjectDataType] && (
                   <div className="relative w-[150px] h-[32px]">
                     {formatItem(objValue, objKey as any)}
-                    <div className="absolute top-1 -right-8">
-                      <EditButton
-                        fn={() =>
-                          handleChangeEdittables(
-                            objKey as keyof IProjectDataType,
-                            String(objValue),
-                          )
-                        }
-                      />
-                    </div>
+                    {objKey !== "due_dates" && (
+                      <div className="absolute top-1 -right-10">
+                        <EditButton
+                          fn={() =>
+                            handleChangeEdittables(
+                              objKey as keyof IProjectDataType,
+                              String(objValue),
+                            )
+                          }
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
                 {edittables?.[objKey as keyof IProjectDataType] && (

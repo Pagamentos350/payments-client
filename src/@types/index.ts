@@ -90,6 +90,7 @@ export type IFormFieldOptions = RegisterOptions & {
   defaultValue?: string;
   step?: string | number;
   _formStates?: formStatesAction;
+  options?: string[],
 };
 
 export interface IFormFieldType {

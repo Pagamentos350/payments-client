@@ -4,6 +4,7 @@ import Loading from "@/components/UI/Loading";
 import { useProjects } from "@/context/ProjectsContext";
 import { useUsers } from "@/context/UsersContext";
 import { formatItem, translateItemKeys } from "@/services/format";
+import { timestampFromNow } from "@/utils/time";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -21,11 +22,30 @@ const CreateProjectModal = () => {
   const [dueDates, setDueDates] = useState<Date[]>([]);
   const [confirmation, setConfirmation] = useState<boolean>(false);
   const [debtData, setDebtData] = useState<Partial<IProjectDataType>>({});
+  const [period, setPeriod] = useState<string>("mensal");
+
+  const setDueDateByPeriod = (string_date: string) => {
+    const periodType = period[0];
+    const initial_date = new Date(string_date);
+    const due_date = new Array(4).fill(0).map((_, i) => {
+      return new Date(
+        timestampFromNow({
+          initial_date,
+          days: periodType === "d" ? i + 1 : 0,
+          months: periodType === "m" ? i + 1 : 0,
+          years: periodType === "a" ? i + 1 : 0,
+        }),
+      );
+    });
+    console.log({ due_date, initial_date, periodType });
+    return due_date;
+  };
 
   const onSubmit = async (data: any) => {
     console.log({ data });
     data.value = Number(data.initial_value) * (1 + Number(data.fee) / 100);
-
+    data.due_dates = setDueDateByPeriod(data.initial_date);
+    console.log({ data });
     setDebtData(data);
     setConfirmation(true);
   };
@@ -41,7 +61,7 @@ const CreateProjectModal = () => {
       value: Number(tempDebtData.value),
       initial_value: Number(tempDebtData.initial_value),
       payment_method: tempDebtData.payment_method,
-      fee: Number(tempDebtData.fee),
+      fee: Number(tempDebtData.fee) / 100,
       initial_date: new Date(tempDebtData.initial_date as unknown as string),
       due_dates: [new Date(tempDebtData.due_dates as unknown as string)],
       payed: Number(tempDebtData.payed),
@@ -91,13 +111,14 @@ const CreateProjectModal = () => {
         (debtData?.initial_date as unknown as string) ||
         new Date(Date.now()).toLocaleDateString("en-CA"),
     },
-    due_dates: {
-      required: "Prazos é necessário",
-      fieldType: "date",
-      fieldLabel: "Prazos",
-      defaultValue: new Date(
-        (debtData?.due_dates as unknown as Date) || Date.now(),
-      )?.toLocaleDateString("en-CA"),
+    period: {
+      required: "Periodicidade é necessário",
+      fieldType: "select",
+      fieldLabel: "Periodicidade",
+      options: ["diario", "semanal", "mensal", "anual"],
+      inputClassName: "h-full w-full",
+
+      _formStates: [period, setPeriod],
     },
     payed: {
       fieldLabel: "Pago adiatado (R$)",
@@ -148,9 +169,19 @@ const CreateProjectModal = () => {
                 <div key={i}>
                   <div className="flex flex-col md:flex-row gap-4">
                     <span>{translateItemKeys(objEntry)}:</span>
-                    <span className="!font-light">
-                      {formatItem(String(objValue), objEntry as any)}
-                    </span>
+                    {objEntry === "due_dates" ? (
+                      <span className="flex flex-col">
+                        {(objValue as Date[]).map((e, i) => (
+                          <small key={i}>
+                            {formatItem(e.toISOString(), objEntry as any)}
+                          </small>
+                        ))}
+                      </span>
+                    ) : (
+                      <span className="!font-light">
+                        {formatItem(String(objValue), objEntry as any)}
+                      </span>
+                    )}
                   </div>
                 </div>
               );

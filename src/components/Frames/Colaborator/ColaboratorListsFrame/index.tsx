@@ -9,7 +9,7 @@ import { useProjects } from "@/context/ProjectsContext";
 import { useUsers } from "@/context/UsersContext";
 import { formatItem, translateItemKeys } from "@/services/format";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GiConfirmed } from "react-icons/gi";
 import { ImCancelCircle } from "react-icons/im";
 
@@ -35,6 +35,7 @@ const ColaboratorListsFrame = ({ user }: Props) => {
     key: keyof IUserDataType,
     value: string | undefined,
   ) => {
+    console.log({ key, value });
     setEdittables(prevState => {
       const newState = JSON.parse(JSON.stringify(prevState));
       newState[key] = value;
@@ -48,6 +49,10 @@ const ColaboratorListsFrame = ({ user }: Props) => {
     await updateUser(obj);
     handleChangeEdittables(key, undefined);
   };
+
+  useEffect(() => {
+    console.log({ edittables });
+  }, [edittables]);
 
   return (
     <div className="frame-container">
@@ -76,7 +81,10 @@ const ColaboratorListsFrame = ({ user }: Props) => {
                   <div className="absolute -top-8 -right-8">
                     <EditButton
                       fn={() =>
-                        handleChangeEdittables(typeKey, objValue ?? undefined)
+                        handleChangeEdittables(
+                          typeKey,
+                          objValue || "Escreva e confirme para atualizar",
+                        )
                       }
                     />
                   </div>

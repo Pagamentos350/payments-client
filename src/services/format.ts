@@ -25,10 +25,14 @@ export const formatItem = (
 ): string | number | null => {
   if (key) {
     if (key === "fee") {
-      return `${value}%`;
+      return `${
+        typeof value === "number"
+          ? value * 100
+          : parseFloat(value as string) * 100
+      }%`;
     }
     if (
-      key.indexOf("value") !== -1 &&
+      (["payed", "late_fee"].includes(key) || key.indexOf("value") !== -1) &&
       (typeof value === "string" || typeof value === "number")
     ) {
       if (typeof value === "string")
@@ -102,6 +106,8 @@ export const translateItemKeys = (
       value: "Valor Atual",
       initial_date: "Data de Inicio",
       due_dates: "Prazos",
+      details: "Detalhes",
+      Description: "Descrição",
     }?.[itemKey as string] || itemKey
   );
 };

@@ -63,7 +63,6 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
   const [update, setUpdate] = useState<boolean>(true);
 
   const deleteProject = async (debt_id: string) => {
-    setLoading(true);
     try {
       const authToken = getAuthToken();
       await axios.post(
@@ -77,7 +76,6 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
       setError(error);
       console.error(error);
     }
-    setLoading(false);
     setUpdate(e => !e);
   };
 
@@ -85,7 +83,6 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
     userPart: Partial<IUserDataType & ISignupType>,
     restricted: boolean = false,
   ) => {
-    setLoading(true);
     try {
       const authToken = getAuthToken();
       await axios.post(`${ENVS.apiUrl}/costumers/update`, userPart, {
@@ -95,7 +92,6 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
       setError(error);
       console.error(error);
     }
-    setLoading(false);
     setUpdate(e => !e);
   };
 
@@ -186,7 +182,6 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
     costumer_id: string,
     debt: Partial<IProjectDataType>,
   ) => {
-    setLoading(true);
     debt = {
       costumer_id: costumer_id,
       value: debt.value,
@@ -211,7 +206,6 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
       console.log({ err });
       setError(err);
     }
-    setLoading(true);
     setUpdate(e => !e);
   };
 

@@ -88,6 +88,27 @@ const AuthForm = ({
       return null;
     }
 
+    if (formOptions.fieldType === "select" && formOptions?._formStates) {
+      const opt = formOptions?._formStates[0];
+      const setOpt = formOptions?._formStates[1];
+      return (
+        <select
+          className={"border border-solid bg-white rounded-lg ring:0 focus:ring-0 focus:outline-none border-gray-400 text-gray-500 text-normal py-3 h-12 px-6 text-lg w-full flex items-center "  + formOptions.inputClassName}
+          onChange={evt => {
+            setOpt(evt.target.value);
+          }}
+          value={opt}
+        >
+          {formOptions?.options &&
+            formOptions?.options.map((e, i) => (
+              <option key={i} value={e}>
+                {capitalize(e)}
+              </option>
+            ))}
+        </select>
+      );
+    }
+
     if (formOptions.fieldType === "textarea") {
       return (
         <textarea
