@@ -6,7 +6,6 @@ import {
 } from "@/@types";
 import EditButton from "@/components/Auth/EditButton";
 import FilterOptionsPanel from "@/components/UI/FilterOptionsPanel";
-import EdittableListItems from "@/components/UI/Items/EdittableListItems";
 import TinyItem from "@/components/UI/Items/TinyItem";
 import RenderItems from "@/components/UI/RenderItems";
 import { useUsers } from "@/context/UsersContext";

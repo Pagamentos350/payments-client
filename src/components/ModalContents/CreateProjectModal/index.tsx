@@ -63,15 +63,18 @@ const CreateProjectModal = () => {
       payment_method: tempDebtData.payment_method,
       fee: Number(tempDebtData.fee) / 100,
       initial_date: new Date(tempDebtData.initial_date as unknown as string),
-      due_dates: [new Date(tempDebtData.due_dates as unknown as string)],
+      due_dates: tempDebtData.due_dates,
       payed: Number(tempDebtData.payed),
       late_fee: Number(tempDebtData.late_fee),
       description: tempDebtData.description,
     };
 
+    console.log({ formatedDebtData });
+
     if (queryId) {
       try {
-        addDebtToUser(queryId, formatedDebtData);
+        const res = addDebtToUser(queryId, formatedDebtData);
+        console.log({ res });
         setConfirmation(false);
         setSubmitted(true);
       } catch (err) {

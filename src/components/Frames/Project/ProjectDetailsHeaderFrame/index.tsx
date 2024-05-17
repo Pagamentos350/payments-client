@@ -134,7 +134,7 @@ const ProjectDetailsHeaderFrame = ({ project }: Props) => {
         <div className="grid md:grid-cols-2 grid-cols-1 justify-evenly gap-4  border-t-gray-300 border-t mt-4">
           {Object.entries({
             initial_date: project.initial_date,
-            due_dates: project?.due_dates?.[project?.callings],
+            due_dates: project?.due_dates,
             initial_value: project?.initial_value,
             fee: project.fee,
             late_fee: project.late_fee,
@@ -149,7 +149,23 @@ const ProjectDetailsHeaderFrame = ({ project }: Props) => {
                 </span>
                 {!edittables?.[objKey as keyof IProjectDataType] && (
                   <div className="relative w-[150px] h-[32px]">
-                    {formatItem(objValue, objKey as any)}
+                    {objKey === "due_dates" ? (
+                      <span className="grid grid-cols-2 grid-flow-row gap-2 gap-x-10 md:flex flex-col md:flex-row md:gap-2 flex-wrap">
+                        {(objValue as unknown as Date[]).map((e, i) => (
+                          <small key={i}>
+                            {formatItem(
+                              new Date(e).toISOString(),
+                              objKey as any,
+                            )}
+                          </small>
+                        ))}
+                      </span>
+                    ) : (
+                      <span className="!font-light">
+                        {formatItem(String(objValue), objKey as any)}
+                      </span>
+                    )}
+                    {/* {formatItem(objValue, objKey as any)} */}
                     {objKey !== "due_dates" && (
                       <div className="absolute top-1 -right-10">
                         <EditButton

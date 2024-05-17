@@ -25,11 +25,10 @@ export const formatItem = (
 ): string | number | null => {
   if (key) {
     if (key === "fee") {
-      return `${
-        typeof value === "number"
-          ? value * 100
-          : parseFloat(value as string) * 100
-      }%`;
+      return `${(typeof value === "number"
+        ? value * 100
+        : parseFloat(value as string) * 100
+      ).toFixed(2)}%`;
     }
     if (
       (["payed", "late_fee"].includes(key) || key.indexOf("value") !== -1) &&

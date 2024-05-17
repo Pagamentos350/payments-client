@@ -7,7 +7,6 @@ import { IFormFieldOptions, IFormFieldType, IFormRegisterType } from "@/@types";
 import { useEffect, useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { capitalize, formatInvalidMessage } from "@/services/format";
-import SelectionFormField from "@/components/UI/FormFields/SelectionFormField";
 import { useUsers } from "@/context/UsersContext";
 
 interface Props {
@@ -76,24 +75,15 @@ const AuthForm = ({
     formName: string,
     formOptions: IFormFieldOptions,
   ) => {
-    if (formOptions.fieldType === "selection") {
-      if (formOptions?._formStates)
-        return (
-          <SelectionFormField
-            type={formName}
-            states={formOptions._formStates}
-            setError={setError}
-          />
-        );
-      return null;
-    }
-
     if (formOptions.fieldType === "select" && formOptions?._formStates) {
       const opt = formOptions?._formStates[0];
       const setOpt = formOptions?._formStates[1];
       return (
         <select
-          className={"border border-solid bg-white rounded-lg ring:0 focus:ring-0 focus:outline-none border-gray-400 text-gray-500 text-normal py-3 h-12 px-6 text-lg w-full flex items-center "  + formOptions.inputClassName}
+          className={
+            "border border-solid bg-white rounded-lg ring:0 focus:ring-0 focus:outline-none border-gray-400 text-gray-500 text-normal py-3 h-12 px-6 text-lg w-full flex items-center " +
+            formOptions.inputClassName
+          }
           onChange={evt => {
             setOpt(evt.target.value);
           }}

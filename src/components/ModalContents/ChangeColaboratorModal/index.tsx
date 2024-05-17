@@ -15,7 +15,7 @@ import router, { useRouter } from "next/router";
 import { useState } from "react";
 
 const ChangeColaboratorModal = () => {
-  const { user, changeUserEmail, changeUserPassword } = useAuth();
+  const { user } = useAuth();
   const { loading, updateUser, error } = useUsers();
   const [submitted, setSubmitted] = useState(false);
   const [message, setMessage] = useState<string>("");
@@ -25,22 +25,22 @@ const ChangeColaboratorModal = () => {
   const onSubmit = async (data: any) => {
     console.log({ data });
     // setSubmitted(true);
-    if (data.senha) {
-      if (data.senha !== data.password_confirm) {
-        return setSubmitted(true);
-      }
-      await changeUserPassword(data.senha);
-    }
-    if (data.email) {
-      await changeUserEmail(data.email);
-      const newUser = { uid: user.uid, email: user.email };
-      if (newUser.uid && newUser.email) {
-        // updateUser(newUser as { uid: string; email: string });
-      }
-    }
-    router.push(`/colaborator/${user.uid}`);
+    // if (data.senha) {
+    //   if (data.senha !== data.password_confirm) {
+    //     return setSubmitted(true);
+    //   }
+    //   await changeUserPassword(data.senha);
+    // }
+    // if (data.email) {
+    //   await changeUserEmail(data.email);
+    //   const newUser = { uid: user.uid, email: user.email };
+    //   if (newUser.uid && newUser.email) {
+    //     // updateUser(newUser as { uid: string; email: string });
+    //   }
+    // }
+    // router.push(`/colaborator/${user.uid}`);
 
-    setModalIsOpen(false);
+    // setModalIsOpen(false);
   };
 
   const formFields: IFormFieldType = {

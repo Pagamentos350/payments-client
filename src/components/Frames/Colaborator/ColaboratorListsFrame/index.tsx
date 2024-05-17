@@ -1,7 +1,6 @@
 import { IProjectDataType, IUserDataType } from "@/@types";
 import DeleteButton from "@/components/Auth/DeleteButton";
 import EditButton from "@/components/Auth/EditButton";
-import EdittableListItems from "@/components/UI/Items/EdittableListItems";
 import TinyItem from "@/components/UI/Items/TinyItem";
 import { useAuth } from "@/context/AuthContext";
 import { useModals } from "@/context/ModalsContext";
