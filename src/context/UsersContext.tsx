@@ -142,7 +142,10 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
 
   useEffect(() => {
     setLoading(true);
+    console.log("UPDATING", { update, user });
     if (user) {
+      console.log("UPDATING", { update });
+
       const fetcher = async () => {
         setAllUsers((await getAllUsers()) as IUserDataType[]);
       };

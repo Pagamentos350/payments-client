@@ -20,7 +20,7 @@ interface Props {
 }
 
 const ColaboratorRestrictedFrame = ({ user }: Props) => {
-  const { getRestrictedData, loading } = useUsers();
+  const { getRestrictedData, loading, update } = useUsers();
   const [data, setData] = useState<IRestrictedDataType>();
   const [error, setError] = useState<string | null>();
   const [filterOptions, setFilterOptions] = useState<IFilterOptions>({
@@ -43,7 +43,7 @@ const ColaboratorRestrictedFrame = ({ user }: Props) => {
     };
     fetcher();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [update, user]);
 
   return (
     <div className="frame-container !w-full">

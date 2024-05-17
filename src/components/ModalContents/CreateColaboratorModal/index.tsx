@@ -9,7 +9,7 @@ import AuthForm from "@/components/Auth/AuthForm";
 import Loading from "@/components/UI/Loading";
 import { useModals } from "@/context/ModalsContext";
 import { useUsers } from "@/context/UsersContext";
-import { translateItemKeys, formatItem } from "@/services/format";
+import { translateItemKeys, formatItem, capitalize } from "@/services/format";
 import { milissecondsInAYear } from "@/utils/constants";
 import { Timestamp } from "firebase/firestore";
 import router, { useRouter } from "next/router";
@@ -29,6 +29,8 @@ const CreateColaboratorModal = () => {
 
   const onSubmit = async (data: any) => {
     console.log({ data });
+    data.name = capitalize(data.name);
+    data.last_name = capitalize(data.last_name);
 
     setcostumerData(data);
     setConfirmation(true);
@@ -158,7 +160,7 @@ const CreateColaboratorModal = () => {
 
     if (submitted)
       return (
-        <div className="flex flex-col w-full h-full justify-center items-center mx-auto text-[26px]">
+        <div className="flex flex-col w-full h-full justify-center items-center mx-auto text-[26px] dark:text-white">
           <div>{error ? error : "Cliente Criado com Sucesso"}</div>
         </div>
       );

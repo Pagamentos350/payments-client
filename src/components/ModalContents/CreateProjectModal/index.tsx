@@ -14,7 +14,7 @@ const CreateProjectModal = () => {
     addDebtToUser,
     loading: projectsLoading,
     error: projectsError,
-    setUpdate: setUpdateProjects,
+    setUpdate,
   } = useUsers();
   const router = useRouter();
 
@@ -77,6 +77,7 @@ const CreateProjectModal = () => {
         console.log({ res });
         setConfirmation(false);
         setSubmitted(true);
+        setUpdate(e => !e);
       } catch (err) {
         console.log(err);
       }
