@@ -1,6 +1,7 @@
 import ChangeColaboratorModal from "@/components/ModalContents/ChangeColaboratorModal";
 import CreateColaboratorModal from "@/components/ModalContents/CreateColaboratorModal";
 import CreateProjectModal from "@/components/ModalContents/CreateProjectModal";
+import DeleteColaboratorModal from "@/components/ModalContents/DeleteColaboratorModal";
 import {
   ReactNode,
   Dispatch,
@@ -17,7 +18,11 @@ interface IModalProvider {
 interface ModalContextProps {
   modalIsOpen: boolean;
   setModalIsOpen: Dispatch<SetStateAction<boolean>>;
-  modalContent: (() => React.JSX.Element) | (() => React.JSX.Element) | (() => React.JSX.Element) | undefined;
+  modalContent:
+    | (() => React.JSX.Element)
+    | (() => React.JSX.Element)
+    | (() => React.JSX.Element)
+    | undefined;
   setModalContentKey: Dispatch<SetStateAction<string>>;
 }
 
@@ -30,8 +35,10 @@ export const ModalProvider = ({ children }: IModalProvider) => {
   const modalContent = {
     default: () => <></>,
     addcolaborator: () => <CreateColaboratorModal />,
-    createprojects: () =>  <CreateProjectModal />,
-    changecolaborator: () => <ChangeColaboratorModal />
+    createprojects: () => <CreateProjectModal />,
+    changecolaborator: () => <ChangeColaboratorModal />,
+    deletecolaborator: () => <DeleteColaboratorModal type={"costumer"} />,
+    deletedebt: () => <DeleteColaboratorModal type={"debt"} />,
   }[modalContentKey];
 
   return (

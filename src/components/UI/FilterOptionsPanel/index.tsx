@@ -33,7 +33,7 @@ const FilterOptionsPanel = ({
 
   return (
     <>
-      <div className="w-[90%] md:justify-between rounded-full dark:border-b-0 dark:border-l-0 dark:border-r-0 md:rounded-none md:mb-0 mb-4 shadow-lg bg-white dark:bg-[#333333] dark:border dark:border-grey-200  md:bg-gray-200 h-[50px] mx-auto flex flex-row justify-center items-center px-4">
+      <div className="w-[90%] flex-col md:flex-row md:justify-between rounded-full dark:border-b-0 dark:border-l-0 dark:border-r-0 md:rounded-none md:mb-0 mb-4 shadow-lg bg-white dark:bg-[#333333] dark:border dark:border-grey-200  md:bg-gray-200 md:h-[50px] mx-auto flex gap-4 justify-center h-auto items-center px-4">
         <AddButton
           fn={() => {
             setModalContentKey(

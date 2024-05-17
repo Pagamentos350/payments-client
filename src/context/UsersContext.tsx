@@ -49,6 +49,8 @@ interface UsersContextProps {
     uniqueField: "email" | "cpf" | "rg",
   ) => boolean;
   addDebtToUser: (costumer_id: string, debt: Partial<IProjectDataType>) => void;
+  deleteProject: (debt_id: string) => Promise<void>;
+  update: boolean;
 }
 
 export const UsersContext = createContext({} as UsersContextProps);
@@ -59,6 +61,25 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
   const [error, setError] = useState<any | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
   const [update, setUpdate] = useState<boolean>(true);
+
+  const deleteProject = async (debt_id: string) => {
+    setLoading(true);
+    try {
+      const authToken = getAuthToken();
+      await axios.post(
+        `${ENVS.apiUrl}/debts/remove`,
+        { debt_id },
+        {
+          headers: { Authorization: "Bearer " + authToken },
+        },
+      );
+    } catch (error) {
+      setError(error);
+      console.error(error);
+    }
+    setLoading(false);
+    setUpdate(e => !e);
+  };
 
   const updateUser = async (
     userPart: Partial<IUserDataType & ISignupType>,
@@ -74,8 +95,8 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
       setError(error);
       console.error(error);
     }
-    setUpdate(e => !e);
     setLoading(false);
+    setUpdate(e => !e);
   };
 
   const createUser = async (user: Partial<IUserDataType>) => {
@@ -191,6 +212,7 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
       setError(err);
     }
     setLoading(true);
+    setUpdate(e => !e);
   };
 
   return (
@@ -209,6 +231,8 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
         deleteUser,
         updateUser,
         verifyUniqueField,
+        update,
+        deleteProject,
       }}
     >
       {children}

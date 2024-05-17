@@ -173,7 +173,7 @@ const CreateProjectModal = () => {
 
     if (submitted)
       return (
-        <div className="flex flex-col h-full justify-center items-center mx-auto text-[26px]">
+        <div className="flex flex-col h-full justify-center items-center mx-auto text-[26px] dark:text-white text-center">
           <div>
             {projectsError ? projectsError : "Débito Criado com Sucesso"}
           </div>

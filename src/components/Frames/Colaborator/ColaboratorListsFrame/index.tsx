@@ -4,6 +4,7 @@ import EditButton from "@/components/Auth/EditButton";
 import EdittableListItems from "@/components/UI/Items/EdittableListItems";
 import TinyItem from "@/components/UI/Items/TinyItem";
 import { useAuth } from "@/context/AuthContext";
+import { useModals } from "@/context/ModalsContext";
 import { useProjects } from "@/context/ProjectsContext";
 import { useUsers } from "@/context/UsersContext";
 import { formatItem, translateItemKeys } from "@/services/format";
@@ -17,14 +18,15 @@ interface Props {
 }
 
 const ColaboratorListsFrame = ({ user }: Props) => {
-  const { removingUserFromProjects, addUsersToProjects } = useProjects();
   const { deleteUser, updateUser } = useUsers();
+  const { setModalContentKey, setModalIsOpen } = useModals();
   const router = useRouter();
 
   const onDeleteColaborator = async () => {
-    await removingUserFromProjects(user);
-    await deleteUser(user.costumer_id);
-    router.push("/projects");
+    setModalContentKey("deletecolaborator");
+    setModalIsOpen(true);
+    // await deleteUser(user.costumer_id);
+    // router.push("/costumers");
   };
 
   const [edittables, setEdittables] = useState<Partial<IUserDataType>>({});

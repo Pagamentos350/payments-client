@@ -13,6 +13,7 @@ import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import { IProjectDataType, IUserDataType } from "@/@types";
 import { ENVS } from "@/utils/constants";
+import { useUsers } from "./UsersContext";
 
 interface IProjectsProvider {
   children: ReactNode;
@@ -24,10 +25,7 @@ interface ProjectsContextProps {
   error: any | undefined;
   sendNewProject: (newProject: IProjectDataType) => Promise<void>;
   updateProjects: (projectPart: Partial<IProjectDataType>) => Promise<void>;
-  deleteProject: (id: string) => Promise<void>;
   setUpdate: Dispatch<SetStateAction<boolean>>;
-  removingUserFromProjects: (user: IUserDataType) => Promise<void>;
-  addUsersToProjects: (user: IUserDataType) => Promise<void>;
   findProject: (ui: string) => IProjectDataType | undefined;
 }
 
@@ -35,6 +33,7 @@ export const ProjectsContext = createContext({} as ProjectsContextProps);
 
 export const ProjectsProvider = ({ children }: IProjectsProvider) => {
   const { user, getAuthToken } = useAuth();
+  const { update: usersUpdate } = useUsers();
   const [allProjects, setAllProjects] = useState<any[]>([]);
   const [error, setError] = useState<any | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
@@ -59,8 +58,6 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
     setUpdate(e => !e);
   };
 
-  const deleteProject = async (id: string) => {};
-
   const sendNewProject = async (newProject: IProjectDataType) => {};
 
   const getAllProjects = async () => {
@@ -75,10 +72,6 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
     }
   };
 
-  const addUsersToProjects = async (user: IUserDataType) => {};
-
-  const removingUserFromProjects = async (user: IUserDataType) => {};
-
   useEffect(() => {
     setLoading(true);
 
@@ -92,7 +85,7 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
     }
     setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, update]);
+  }, [user, update, usersUpdate]);
   return (
     <ProjectsContext.Provider
       value={{
@@ -102,9 +95,6 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
         sendNewProject,
         setUpdate,
         updateProjects,
-        deleteProject,
-        removingUserFromProjects,
-        addUsersToProjects,
         findProject,
       }}
     >

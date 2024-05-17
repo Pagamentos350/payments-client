@@ -2,7 +2,6 @@ import { IProjectDataType } from "@/@types";
 import ProjectDetailsHeaderFrame from "@/components/Frames/Project/ProjectDetailsHeaderFrame";
 import BackButton from "@/components/UI/BackButton";
 import ProjectListsFrame from "@/components/Frames/Project/ProjectListsFrame";
-import ProjectCommentsFrame from "../../Frames/Project/ProjectCommentsFrame";
 import FadeIn from "@/components/UI/Animations/FadeIn";
 import { Transition } from "@headlessui/react";
 import { useState, useEffect } from "react";
@@ -28,12 +27,9 @@ const ProjectDetailsLayout = ({ project }: Props) => {
         <FadeIn delay="delay-[300ms]">
           <ProjectDetailsHeaderFrame project={project} />
         </FadeIn>
-        {/* <FadeIn delay="delay-[300ms]">
+        <FadeIn delay="delay-[300ms]">
           <ProjectListsFrame project={project} />
         </FadeIn>
-        <FadeIn delay="delay-[300ms]">
-          <ProjectCommentsFrame project={project} />
-        </FadeIn> */}
       </Transition.Root>
     </section>
   );

@@ -61,7 +61,7 @@ const ProjectDetailsHeaderFrame = ({ project }: Props) => {
 
   return (
     <div className="frame-container">
-      <div className="w-[80%]">
+      <div className="w-full">
         <div className="flex justify-start items-center">
           <AiOutlineProject className="h-24 w-24" />
           {!edittables?.value && (

@@ -79,7 +79,7 @@ const PrimaryDataItem = ({ data, type }: Props) => {
             style={{ overflowWrap: "anywhere" }}
             className={`flex flex-col border-r-gray-400 md:border-none md:border-r min-w-[50px] last:border-0 gap-2 justify-center items-center p-4 overflow-x-hidden overflow-ellipsis w-full`}
           >
-            <span className="font-semibold md:hidden">
+            <span className="font-semibold md:hidden text-center">
               {translateItemKeys(objKey)}:
             </span>
             <span className="min-w-[100px] text-center">
