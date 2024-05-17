@@ -59,7 +59,7 @@ const ColaboratorRestrictedFrame = ({ user }: Props) => {
         <div className="w-full flex flex-col justify-center">
           {Array.isArray(data) && (
             <RenderItems
-              type={"debt"}
+              type={"debts"}
               arrayItems={data}
               error={error}
               loading={loading}

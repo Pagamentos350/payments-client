@@ -24,16 +24,16 @@ const ProjectDetailsLayout = ({ project }: Props) => {
   return (
     <section className="flex relative justify-start gap-4 items-center flex-col px-12 shadow-lg min-h-[75vh] dark:text-white">
       <Transition.Root show={mounted} className={"w-full"}>
-        <BackButton path={"/projects"} />
+        <BackButton path={`/costumers/${project.costumer_id}`} />
         <FadeIn delay="delay-[300ms]">
           <ProjectDetailsHeaderFrame project={project} />
         </FadeIn>
-        <FadeIn delay="delay-[300ms]">
+        {/* <FadeIn delay="delay-[300ms]">
           <ProjectListsFrame project={project} />
         </FadeIn>
         <FadeIn delay="delay-[300ms]">
           <ProjectCommentsFrame project={project} />
-        </FadeIn>
+        </FadeIn> */}
       </Transition.Root>
     </section>
   );

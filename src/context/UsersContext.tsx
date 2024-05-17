@@ -64,6 +64,7 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
     userPart: Partial<IUserDataType & ISignupType>,
     restricted: boolean = false,
   ) => {
+    setLoading(true);
     try {
       const authToken = getAuthToken();
       await axios.post(`${ENVS.apiUrl}/costumers/update`, userPart, {
@@ -74,6 +75,7 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
       console.error(error);
     }
     setUpdate(e => !e);
+    setLoading(false);
   };
 
   const createUser = async (user: Partial<IUserDataType>) => {

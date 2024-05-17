@@ -101,6 +101,7 @@ export const translateItemKeys = (
       payment_method: "Método",
       value: "Valor Atual",
       initial_date: "Data de Inicio",
+      due_dates: "Prazos",
     }?.[itemKey as string] || itemKey
   );
 };

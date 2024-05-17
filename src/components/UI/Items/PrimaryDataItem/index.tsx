@@ -30,7 +30,6 @@ const PrimaryDataItem = ({ data, type }: Props) => {
       !Array.isArray(objValue) ||
       ["projects", "teamUids"].includes(objKey as string)
     ) {
-
       return formatItem(objValue, objKey);
     }
 
@@ -95,7 +94,7 @@ const PrimaryDataItem = ({ data, type }: Props) => {
       <div className="absolute -right-9 md:top-[15%] bottom-[5%]">
         <Link
           href={`/${type}/${
-            type === "colaborators"
+            type === "costumers"
               ? (data as any).costumer_id
               : (data as any).debt_id
           } `}

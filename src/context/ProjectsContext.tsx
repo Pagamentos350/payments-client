@@ -8,19 +8,11 @@ import {
   useState,
 } from "react";
 
-import { db, projectsCollection } from "@/config/firebase";
-import {
-  getDocs,
-  collection,
-  addDoc,
-  query,
-  where,
-  doc,
-  updateDoc,
-  deleteDoc,
-} from "firebase/firestore";
+import axios from "axios";
+
 import { useAuth } from "@/context/AuthContext";
 import { IProjectDataType, IUserDataType } from "@/@types";
+import { ENVS } from "@/utils/constants";
 
 interface IProjectsProvider {
   children: ReactNode;
@@ -42,7 +34,7 @@ interface ProjectsContextProps {
 export const ProjectsContext = createContext({} as ProjectsContextProps);
 
 export const ProjectsProvider = ({ children }: IProjectsProvider) => {
-  const { user, activeUserData } = useAuth();
+  const { user, getAuthToken } = useAuth();
   const [allProjects, setAllProjects] = useState<any[]>([]);
   const [error, setError] = useState<any | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
@@ -53,117 +45,39 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
   };
 
   const updateProjects = async (projectPart: Partial<IProjectDataType>) => {
-    const adminPermission =
-      parseInt(activeUserData?.permissionLevel || "0") > 1;
-    const commentsException =
-      Object.keys(projectPart).length === 2 &&
-      "id" in projectPart &&
-      "comments" in projectPart;
-    console.log({ projectPart, adminPermission, commentsException });
-    if (adminPermission || commentsException) {
-      try {
-        const q = query(
-          collection(db, projectsCollection),
-          where("id", "==", projectPart.id),
-        );
-        const querySnapshot = await getDocs(q);
-        const docId: string[] = [];
-        querySnapshot.forEach(e => docId.push(e.id));
-        const projectRef = doc(db, projectsCollection, docId[0]);
-        await updateDoc(projectRef, projectPart);
-        setUpdate(e => !e);
-      } catch (error) {
-        console.error(error);
-      }
+    setLoading(true);
+    try {
+      const authToken = getAuthToken();
+      await axios.post(`${ENVS.apiUrl}/debts/update`, projectPart, {
+        headers: { Authorization: "Bearer " + authToken },
+      });
+    } catch (error) {
+      setError(error);
+      console.error(error);
     }
-  };
-
-  const deleteProject = async (id: string) => {
-    const q = query(collection(db, projectsCollection), where("id", "==", id));
-    const docId: any[] = [];
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach(doc => docId.push(doc.id));
-    await deleteDoc(doc(db, projectsCollection, docId[0]));
+    setLoading(false);
     setUpdate(e => !e);
   };
 
-  const sendNewProject = async (newProject: IProjectDataType) => {
-    setLoading(true);
-    try {
-      await addDoc(collection(db, projectsCollection), newProject);
-      setUpdate(prevState => !prevState);
-    } catch (error) {
-      console.error(error);
-      setError(error);
-    }
-    setLoading(false);
-  };
+  const deleteProject = async (id: string) => {};
+
+  const sendNewProject = async (newProject: IProjectDataType) => {};
 
   const getAllProjects = async () => {
     try {
-      const projectArray: IProjectDataType[] = [];
-      const querySnapshot = await getDocs(collection(db, projectsCollection));
-      querySnapshot.forEach(doc => {
-        projectArray.push(doc.data() as IProjectDataType);
+      const authToken = getAuthToken();
+      const res = await axios.get(`${ENVS.apiUrl}/debts`, {
+        headers: { Authorization: "Bearer " + authToken },
       });
-      return projectArray;
-    } catch (error) {
-      console.error(error);
-      setError(error);
-    }
-  };
-
-  const addUsersToProjects = async (user: IUserDataType) => {
-    try {
-      const q = query(
-        collection(db, projectsCollection),
-        where("teamUids", "array-contains", user?.uid),
-      );
-      const querySnapshot = await getDocs(q);
-      const docs: any = {};
-      querySnapshot.forEach(doc => (docs[doc.id] = doc.data()));
-      Object.entries(docs).forEach(async ([docKey, docValue]) => {
-        const docRef = doc(db, projectsCollection, docKey);
-        const teamCopy = JSON.parse(JSON.stringify((docValue as any).teamUids));
-        teamCopy.splice(user.uid, 1);
-        console.log({ docRef, teamCopy, docValue });
-        await updateDoc(docRef, {
-          teamUids: teamCopy,
-        });
-      });
-      setUpdate(e => !e);
+      return res.data.result;
     } catch (error) {
       console.error(error);
     }
   };
 
-  const removingUserFromProjects = async (user: IUserDataType) => {
-    try {
-      if (user?.uid) {
-        const q = query(
-          collection(db, projectsCollection),
-          where("teamUids", "array-contains", user?.uid),
-        );
-        const querySnapshot = await getDocs(q);
-        const docs: any = {};
-        querySnapshot.forEach(doc => (docs[doc.id] = doc.data()));
-        Object.entries(docs).forEach(async ([docKey, docValue]) => {
-          const docRef = doc(db, projectsCollection, docKey);
-          const teamCopy = JSON.parse(
-            JSON.stringify((docValue as any).teamUids),
-          );
-          teamCopy.splice(user.uid, 1);
-          console.log({ docRef, teamCopy, docValue });
-          await updateDoc(docRef, {
-            teamUids: teamCopy,
-          });
-        });
-      }
-      setUpdate(e => !e);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const addUsersToProjects = async (user: IUserDataType) => {};
+
+  const removingUserFromProjects = async (user: IUserDataType) => {};
 
   useEffect(() => {
     setLoading(true);

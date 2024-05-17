@@ -39,7 +39,7 @@ const ColaboratorsLayout = () => {
             </div>
             <div className="w-full flex flex-col justify-center">
               <RenderItems
-                type={"colaborators"}
+                type={"costumers"}
                 arrayItems={allUsers}
                 error={error}
                 loading={loading}

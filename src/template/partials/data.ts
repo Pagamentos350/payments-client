@@ -8,7 +8,7 @@ export const navigationLinks: INavLinks = [
   {
     displayName: "Detalhes",
     subpaths: [
-      { displayName: "Clientes", path: "/colaborators" },
+      { displayName: "Clientes", path: "/costumers" },
       // { displayName: "Projetos", path: "/projects" },
     ],
   },

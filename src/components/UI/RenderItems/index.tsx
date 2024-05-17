@@ -49,8 +49,8 @@ const RenderItems = ({
       <PrimaryDataItem
         type={type}
         key={
-          type === "users"
-            ? (itemData as any)?.costumer_id
+          type === "costumers"
+            ? (itemData as IUserDataType)?.costumer_id
             : (itemData as any)?.debt_id
         }
         data={itemData as any}

@@ -14,14 +14,11 @@ const ProjectDetails = () => {
   const router = useRouter();
   const slug = router.query.id;
   const { allProjects } = useProjects();
-  const selectedProject = allProjects.find(e => e.id === slug);
+  const selectedProject = allProjects.find(e => e.debt_id === slug);
 
   return (
     <Suspense fallback={<Loading />}>
-      <Meta
-        title={`Gerenciamento Dev - ${selectedProject?.name}`}
-        description={`Perfil do colaborador ${selectedProject?.name}`}
-      />
+      <Meta title={`Gerenciamento Dev`} description={``} />
       <LazyProjectDetailsLayout project={selectedProject} />
     </Suspense>
   );
