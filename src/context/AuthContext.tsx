@@ -1,25 +1,15 @@
 import {
-  UserCredential,
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signOut,
-  updateEmail,
-  updatePassword,
-} from "firebase/auth";
-import {
   createContext,
   ReactNode,
   useContext,
   useEffect,
   useState,
 } from "react";
-import { IUserDataType, IUserType } from "@/@types";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { IUserType } from "@/@types";
 import axios from "axios";
 import { ENVS } from "@/utils/constants";
 import { deleteCookie, getCookie, setCookie } from "@/utils/cookieHandler";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 interface IAuthProvider {
   children: ReactNode;
@@ -122,7 +112,11 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
         const check: any = await checkToken(token);
         console.log({ check });
         if (check?.result) {
-          setUser({ email: check.user.email, uid: check.user.uid, permission: check.user.permission });
+          setUser({
+            email: check.user.email,
+            uid: check.user.uid,
+            permission: check.user.permission,
+          });
         } else {
           deleteCookie("_at");
         }
