@@ -15,7 +15,7 @@ const HomeLayout = () => {
     } catch (error) {
       console.error(error);
     }
-    router.push("/colaborators");
+    router.push("/costumers");
   };
 
   const formFields: IFormFieldType = {
