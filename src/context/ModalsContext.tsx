@@ -2,6 +2,7 @@ import ChangeColaboratorModal from "@/components/ModalContents/ChangeColaborator
 import CreateColaboratorModal from "@/components/ModalContents/CreateColaboratorModal";
 import CreateProjectModal from "@/components/ModalContents/CreateProjectModal";
 import DeleteColaboratorModal from "@/components/ModalContents/DeleteColaboratorModal";
+import UpdateProjectModal from "@/components/ModalContents/UpdateProjectModal";
 import {
   ReactNode,
   Dispatch,
@@ -39,6 +40,7 @@ export const ModalProvider = ({ children }: IModalProvider) => {
     changecolaborator: () => <ChangeColaboratorModal />,
     deletecolaborator: () => <DeleteColaboratorModal type={"costumer"} />,
     deletedebt: () => <DeleteColaboratorModal type={"debt"} />,
+    editProj: () => <UpdateProjectModal />
   }[modalContentKey];
 
   return (

@@ -9,13 +9,15 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-const CreateProjectModal = () => {
+const UpdateProjectModal = () => {
   const {
     addDebtToUser,
     loading: projectsLoading,
     error: projectsError,
     setUpdate,
   } = useUsers();
+
+  const { updateProjects } = useProjects();
   const router = useRouter();
 
   const [submitted, setSubmitted] = useState(false);
@@ -67,6 +69,7 @@ const CreateProjectModal = () => {
     );
     const queryId = router.asPath.split("/").pop();
     const formatedDebtData: any = {
+      debt_id: Number(queryId),
       callings: Number(tempDebtData.callings),
       value: Number(tempDebtData.value),
       initial_value: Number(tempDebtData.initial_value),
@@ -79,11 +82,9 @@ const CreateProjectModal = () => {
       description: tempDebtData.description,
     };
 
-    console.log({ formatedDebtData });
-
     if (queryId) {
       try {
-        const res = addDebtToUser(queryId, formatedDebtData);
+        const res = updateProjects(formatedDebtData);
         console.log({ res });
         setConfirmation(false);
         setSubmitted(true);
@@ -183,6 +184,9 @@ const CreateProjectModal = () => {
         <div className="flex flex-col h-full justify-center items-center md:mx-auto text-[26px] dark:text-white">
           <div>
             <h4 className="text-center">Confirme os dados</h4>
+            <h4 className="px-12 mt-8 text-center text-xl font-semibold text-blue-900 dark:text-white">
+              Essa ação é irreversível e substituirá o débito anterior
+            </h4>
           </div>
           <div className="md:grid md:grid-cols-2 grid-flow-row gap-4 my-4  overflow-y-auto">
             {Object.entries(debtData).map(([objEntry, objValue], i) => {
@@ -245,7 +249,7 @@ const CreateProjectModal = () => {
   return (
     <div className="container mx-auto min-w-[250px] md:-w-[800px] w-[300px] lg:min-w-[1000px]">
       <h2 className="px-12 mt-8 text-center text-2xl font-semibold text-blue-900 dark:text-white">
-        Novo Débito
+        Renegociando Débito
       </h2>
       <div className="max-h-[80vh] overflow-y-scroll md:overflow-y-auto md:min-h-[60vh] flex justify-center items-start">
         {renderFormContent()}
@@ -254,4 +258,4 @@ const CreateProjectModal = () => {
   );
 };
 
-export default CreateProjectModal;
+export default UpdateProjectModal;

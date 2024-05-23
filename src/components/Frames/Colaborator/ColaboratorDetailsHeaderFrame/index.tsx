@@ -35,6 +35,8 @@ const ColaboratorDetailsHeaderFrame = ({ user }: Props) => {
     handleChangeEdittables(key, undefined);
   };
 
+  console.log({ user });
+
   return (
     <div className="frame-container">
       <div className="w-full">
