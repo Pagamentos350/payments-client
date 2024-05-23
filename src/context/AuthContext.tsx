@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
 
     await axios
       .post(
-        `http://localhost:3333/api/v1/login`,
+        `${ENVS.apiUrl}/login`,
         { email, password },
         {
           headers: {
