@@ -24,7 +24,6 @@ const ColaboratorRestrictedFrame = ({ user }: Props) => {
   const [data, setData] = useState<IRestrictedDataType>();
   const [error, setError] = useState<string | null>();
   const [filterOptions, setFilterOptions] = useState<IFilterOptions>({
-    callings: "",
     fee: "",
     initial_date: "",
     initial_value: "",

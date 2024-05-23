@@ -139,7 +139,6 @@ const ProjectDetailsHeaderFrame = ({ project }: Props) => {
             fee: project.fee,
             late_fee: project.late_fee,
             payed: project.payed,
-            callings: project.callings,
             payment_method: project.payment_method,
           }).map(([objKey, objValue], index) => {
             return (
@@ -150,15 +149,20 @@ const ProjectDetailsHeaderFrame = ({ project }: Props) => {
                 {!edittables?.[objKey as keyof IProjectDataType] && (
                   <div className="relative w-[150px] h-[32px]">
                     {objKey === "due_dates" ? (
-                      <span className="grid grid-cols-2 grid-flow-row gap-2 gap-x-10 md:flex flex-col md:flex-row md:gap-2 flex-wrap">
-                        {(objValue as unknown as Date[]).map((e, i) => (
-                          <small key={i}>
-                            {formatItem(
-                              new Date(e).toISOString(),
-                              objKey as any,
-                            )}
-                          </small>
-                        ))}
+                      <span className="grid grid-rows-2 grid-flow-col gap-2 gap-x-10 md:gap-2 flex-wrap">
+                        {(objValue as unknown as Date[])
+                          .slice(
+                            (objValue as unknown as Date[]).length - 5,
+                            (objValue as unknown as Date[]).length - 1,
+                          )
+                          .map((e, i) => (
+                            <small key={i}>
+                              {formatItem(
+                                new Date(e).toISOString(),
+                                objKey as any,
+                              )}
+                            </small>
+                          ))}
                       </span>
                     ) : (
                       <span className="!font-light">
@@ -166,7 +170,13 @@ const ProjectDetailsHeaderFrame = ({ project }: Props) => {
                       </span>
                     )}
                     {/* {formatItem(objValue, objKey as any)} */}
-                    {objKey !== "due_dates" && (
+                    {![
+                      "due_dates",
+                      "initial_value",
+                      "due_dates",
+                      "fee",
+                      "late_fee",
+                    ].includes(objKey) && (
                       <div className="absolute top-1 -right-10">
                         <EditButton
                           fn={() =>

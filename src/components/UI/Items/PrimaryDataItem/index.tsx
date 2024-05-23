@@ -67,6 +67,7 @@ const PrimaryDataItem = ({ data, type }: Props) => {
             "_id",
             "due_dates",
             "debt_id",
+            "callings"
           ].includes(objKey)
         ) {
           return null;
