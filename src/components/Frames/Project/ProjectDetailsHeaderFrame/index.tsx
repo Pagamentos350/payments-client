@@ -152,8 +152,8 @@ const ProjectDetailsHeaderFrame = ({ project }: Props) => {
                       <span className="grid grid-rows-2 grid-flow-col gap-2 gap-x-10 md:gap-2 flex-wrap">
                         {(objValue as unknown as Date[])
                           .slice(
-                            (objValue as unknown as Date[]).length - 5,
-                            (objValue as unknown as Date[]).length - 1,
+                            (objValue as unknown as Date[]).length - 4,
+                            (objValue as unknown as Date[]).length,
                           )
                           .map((e, i) => (
                             <small key={i}>
