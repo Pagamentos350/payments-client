@@ -14,7 +14,7 @@ const ProjectDetails = () => {
   const router = useRouter();
   const slug = router.query.id;
   const { allProjects } = useProjects();
-  const selectedProject = allProjects.find(e => e.debt_id === slug);
+  const selectedProject = allProjects?.find(e => e.debt_id === slug);
 
   return (
     <Suspense fallback={<Loading />}>

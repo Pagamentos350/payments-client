@@ -185,7 +185,8 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
     costumer_id: string,
     debt: Partial<IProjectDataType>,
   ) => {
-    debt = {
+    setError(null);
+    const newDebt = {
       costumer_id: costumer_id,
       value: debt.value,
       initial_value: debt.initial_value,
@@ -199,11 +200,28 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
       description: debt.description,
     };
 
+    const doc = debt?.doc?.[0];
+
+    const fd = new FormData();
+    console.log({ doc });
+    fd.append("file", doc as File);
+
+    fd.append("data", JSON.stringify(newDebt));
+
     try {
       const authToken = getAuthToken();
-      const res = await axios.post(`${ENVS.apiUrl}/debts/add`, debt, {
-        headers: { Authorization: "Bearer " + authToken },
+      const res = await axios.postForm(`${ENVS.apiUrl}/debts/add`, fd, {
+        headers: {
+          Authorization: "Bearer " + authToken,
+          "Content-Type": "multipart/form-data",
+        },
       });
+      // const resUpload = await axios.postForm(`${ENVS.apiUrl}/debts/post`, fd, {
+      //   headers: {
+      //     Authorization: "Bearer " + authToken,
+      //     "Content-Type": "multipart/form-data",
+      //   },
+      // });
       setUpdate(e => !e);
     } catch (err) {
       console.log({ err });

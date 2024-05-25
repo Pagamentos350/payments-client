@@ -43,11 +43,36 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
     return allProjects.find(e => e.id === id);
   };
 
-  const updateProjects = async (projectPart: Partial<IProjectDataType>) => {
+  const updateProjects = async (debt: Partial<IProjectDataType>) => {
+    setError(null);
+    // const newDebt = {
+    //   costumer_id: debt.costumer_id,
+    //   value: debt.value,
+    //   initial_value: debt.initial_value,
+    //   payment_method: debt.payment_method,
+    //   fee: debt.fee,
+    //   initial_date: debt.initial_date,
+    //   due_dates: debt.due_dates,
+    //   payed: debt.payed,
+    //   late_fee: debt.late_fee,
+    //   callings: debt.callings,
+    //   description: debt.description,
+    // };
+
+    const doc = debt?.doc?.[0];
+    const fd = new FormData();
+    console.log({ doc });
+    if (doc) fd.append("file", doc as File);
+
+    fd.append("data", JSON.stringify(debt));
+
     try {
       const authToken = getAuthToken();
-      await axios.post(`${ENVS.apiUrl}/debts/update`, projectPart, {
-        headers: { Authorization: "Bearer " + authToken },
+      await axios.postForm(`${ENVS.apiUrl}/debts/update`, fd, {
+        headers: {
+          Authorization: "Bearer " + authToken,
+          "Content-Type": "multipart/form-data",
+        },
       });
     } catch (error) {
       setError(error);

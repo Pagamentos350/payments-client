@@ -90,7 +90,7 @@ export type IFormFieldOptions = RegisterOptions & {
   defaultValue?: string;
   step?: string | number;
   _formStates?: formStatesAction;
-  options?: string[],
+  options?: string[];
 };
 
 export interface IFormFieldType {
@@ -117,6 +117,7 @@ export type IProjectDataType = {
   due_dates: Date[];
   payed: number;
   late_fee: number;
+  doc?: FileList;
   description: string;
   createdAt: Date;
   updatedAt: Date;
@@ -137,7 +138,7 @@ export type IUserDataType = { email: string } & IUserType & {
     updatedAt: Date;
   };
 
-export type OmittedTS = "id" | "uid" | "createdAt" | "updatedAt";
+export type OmittedTS = "id" | "uid" | "createdAt" | "updatedAt" | "doc";
 
 type IFilterKeys =
   | ObtainKeys<

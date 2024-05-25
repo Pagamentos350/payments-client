@@ -5,6 +5,7 @@ import { useProjects } from "@/context/ProjectsContext";
 import { useUsers } from "@/context/UsersContext";
 import { formatItem, translateItemKeys } from "@/services/format";
 import { timestampFromNow } from "@/utils/time";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -56,6 +57,7 @@ const CreateProjectModal = () => {
     console.log({ data });
     data.value = Number(data.initial_value) * (1 + Number(data.fee) / 100);
     data.due_dates = setDueDateByPeriod(data.initial_date);
+
     console.log({ data });
     setDebtData(data);
     setConfirmation(true);
@@ -67,7 +69,6 @@ const CreateProjectModal = () => {
     );
     const queryId = router.asPath.split("/").pop();
     const formatedDebtData: any = {
-      callings: Number(tempDebtData.callings),
       value: Number(tempDebtData.value),
       initial_value: Number(tempDebtData.initial_value),
       payment_method: tempDebtData.payment_method,
@@ -77,9 +78,8 @@ const CreateProjectModal = () => {
       payed: Number(tempDebtData.payed),
       late_fee: Number(tempDebtData.late_fee),
       description: tempDebtData.description,
+      doc: debtData.doc,
     };
-
-    console.log({ formatedDebtData });
 
     if (queryId) {
       try {
@@ -87,6 +87,7 @@ const CreateProjectModal = () => {
         console.log({ res });
         setConfirmation(false);
         setSubmitted(true);
+        setDebtData({});
         setUpdate(e => !e);
       } catch (err) {
         console.log(err);
@@ -100,7 +101,7 @@ const CreateProjectModal = () => {
       fieldLabel: "Valor Inicial (R$)",
       fieldType: "text",
       divClassName: "col-start-1 col-end-3",
-      defaultValue: String(debtData?.initial_value || 0),
+      defaultValue: String(debtData?.initial_value || 1000),
     },
     description: {
       fieldType: "textarea",
@@ -113,7 +114,7 @@ const CreateProjectModal = () => {
       required: "Taxa é necessário",
       fieldLabel: "Taxa (%)",
       fieldType: "number",
-      defaultValue: String(debtData?.fee || 0),
+      defaultValue: String(debtData?.fee || 10),
       min: "0",
       step: "0.01",
     },
@@ -151,18 +152,17 @@ const CreateProjectModal = () => {
       required: "Multa por Atraso é necessario",
       fieldType: "number",
       step: "0.01",
-      defaultValue: String(debtData?.late_fee || 0),
+      defaultValue: String(debtData?.late_fee || 10),
     },
-    callings: {
-      fieldLabel: "Cobranças",
-      required: "Cobraças é necessario",
-      fieldType: "number",
-      defaultValue: String(debtData?.callings || 0),
-    },
+
     payment_method: {
       fieldLabel: "Método de Pagamento",
       fieldType: "string",
       defaultValue: String(debtData?.payment_method || ""),
+    },
+    doc: {
+      fieldLabel: "Documento",
+      fieldType: "file",
     },
   };
 
@@ -227,7 +227,9 @@ const CreateProjectModal = () => {
       return (
         <div className="flex flex-col h-full justify-center items-center mx-auto text-[26px] dark:text-white text-center">
           <div>
-            {projectsError ? projectsError : "Débito Criado com Sucesso"}
+            {projectsError
+              ? (projectsError as AxiosError).message
+              : "Débito Criado com Sucesso"}
           </div>
         </div>
       );

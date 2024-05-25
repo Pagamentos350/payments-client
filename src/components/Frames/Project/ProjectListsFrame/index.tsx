@@ -33,6 +33,14 @@ const ProjectListsFrame = ({ project }: Props) => {
 
   return (
     <div className="frame-container">
+      {project?.doc && (
+        <div>
+          <embed
+            src={project.doc as unknown as string}
+            className="w-full max-h-[500px]"
+          />
+        </div>
+      )}
       <div className="flex flex-col md:flex-row w-full justify-end mt-4 border-t-gray-300 border-t pt-4 gap-4">
         <button onClick={onEdit} className="btn !max-w-[200px] text-white">
           Renegociamento

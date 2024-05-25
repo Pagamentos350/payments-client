@@ -11,19 +11,23 @@ import { v4 as uuidv4 } from "uuid";
 
 const UpdateProjectModal = () => {
   const {
-    addDebtToUser,
     loading: projectsLoading,
     error: projectsError,
     setUpdate,
   } = useUsers();
 
-  const { updateProjects } = useProjects();
+  const { updateProjects, allProjects } = useProjects();
   const router = useRouter();
+  const queryId = router.asPath.split("/").pop();
+
+  const currentDebt = allProjects?.find(e => e?.debt_id === queryId);
 
   const [submitted, setSubmitted] = useState(false);
   const [dueDates, setDueDates] = useState<Date[]>([]);
   const [confirmation, setConfirmation] = useState<boolean>(false);
-  const [debtData, setDebtData] = useState<Partial<IProjectDataType>>({});
+  const [debtData, setDebtData] = useState<Partial<IProjectDataType>>(
+    currentDebt || {},
+  );
   const [period, setPeriod] = useState<string>("mensal");
 
   const setDueDateByPeriod = (string_date: string) => {
@@ -67,9 +71,9 @@ const UpdateProjectModal = () => {
     const tempDebtData: Partial<IProjectDataType> = JSON.parse(
       JSON.stringify(debtData),
     );
-    const queryId = router.asPath.split("/").pop();
+
     const formatedDebtData: any = {
-      debt_id: Number(queryId),
+      debt_id: queryId,
       callings: Number(tempDebtData.callings),
       value: Number(tempDebtData.value),
       initial_value: Number(tempDebtData.initial_value),
@@ -80,6 +84,7 @@ const UpdateProjectModal = () => {
       payed: Number(tempDebtData.payed),
       late_fee: Number(tempDebtData.late_fee),
       description: tempDebtData.description,
+      doc: debtData.doc,
     };
 
     if (queryId) {
@@ -123,7 +128,7 @@ const UpdateProjectModal = () => {
       fieldType: "date",
       fieldLabel: "Data de Inicio",
       defaultValue:
-        (debtData?.initial_date as unknown as string) ||
+        new Date(String(debtData?.initial_date)).toLocaleDateString("en-CA") ||
         new Date(Date.now()).toLocaleDateString("en-CA"),
     },
     period: {
@@ -154,16 +159,14 @@ const UpdateProjectModal = () => {
       step: "0.01",
       defaultValue: String(debtData?.late_fee || 0),
     },
-    callings: {
-      fieldLabel: "Cobranças",
-      required: "Cobraças é necessario",
-      fieldType: "number",
-      defaultValue: String(debtData?.callings || 0),
-    },
     payment_method: {
       fieldLabel: "Método de Pagamento",
       fieldType: "string",
       defaultValue: String(debtData?.payment_method || ""),
+    },
+    doc: {
+      fieldLabel: "Documento",
+      fieldType: "file",
     },
   };
 
