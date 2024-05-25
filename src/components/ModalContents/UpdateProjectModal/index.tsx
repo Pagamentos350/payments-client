@@ -7,7 +7,6 @@ import { formatItem, translateItemKeys } from "@/services/format";
 import { timestampFromNow } from "@/utils/time";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 
 const UpdateProjectModal = () => {
   const {
@@ -23,7 +22,6 @@ const UpdateProjectModal = () => {
   const currentDebt = allProjects?.find(e => e?.debt_id === queryId);
 
   const [submitted, setSubmitted] = useState(false);
-  const [dueDates, setDueDates] = useState<Date[]>([]);
   const [confirmation, setConfirmation] = useState<boolean>(false);
   const [debtData, setDebtData] = useState<Partial<IProjectDataType>>(
     currentDebt || {},

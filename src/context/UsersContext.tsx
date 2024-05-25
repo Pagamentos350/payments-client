@@ -96,9 +96,27 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
   };
 
   const createUser = async (user: Partial<IUserDataType>) => {
+    setError(null);
+
     try {
+      const fd = new FormData();
+
+      fd.append("data", JSON.stringify(user));
+      if (user?.cpfDoc) {
+        fd.append("cpfDoc", user.cpfDoc[0]);
+        console.log("cpfDoc", user.cpfDoc[0]);
+      }
+      if (user?.rgDoc) {
+        fd.append("rgDoc", user.rgDoc[0]);
+        console.log("rgDoc", user.rgDoc[0]);
+      }
+      if (user?.otherDoc) {
+        fd.append("otherDoc", user.otherDoc[0]);
+        console.log("otherDoc", user.otherDoc[0]);
+      }
+
       const authToken = getAuthToken();
-      await axios.post(`${ENVS.apiUrl}/costumers/add`, user, {
+      await axios.postForm(`${ENVS.apiUrl}/costumers/add`, fd, {
         headers: { Authorization: "Bearer " + authToken },
       });
     } catch (error) {

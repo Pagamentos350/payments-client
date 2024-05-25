@@ -134,11 +134,22 @@ export type IUserDataType = { email: string } & IUserType & {
     cpf: string;
     rg: string;
     details: string;
+    cpfDoc?: FileList | string;
+    rgDoc?: FileList | string;
+    otherDoc?: FileList | string;
     createdAt: Date;
     updatedAt: Date;
   };
 
-export type OmittedTS = "id" | "uid" | "createdAt" | "updatedAt" | "doc";
+export type OmittedTS =
+  | "id"
+  | "uid"
+  | "createdAt"
+  | "updatedAt"
+  | "doc"
+  | "rgDoc"
+  | "cpfDoc"
+  | "otherDoc";
 
 type IFilterKeys =
   | ObtainKeys<

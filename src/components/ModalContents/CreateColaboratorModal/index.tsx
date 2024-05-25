@@ -11,6 +11,7 @@ import { useModals } from "@/context/ModalsContext";
 import { useUsers } from "@/context/UsersContext";
 import { translateItemKeys, formatItem, capitalize } from "@/services/format";
 import { milissecondsInAYear } from "@/utils/constants";
+import { AxiosError } from "axios";
 import { Timestamp } from "firebase/firestore";
 import router, { useRouter } from "next/router";
 import { useState } from "react";
@@ -109,6 +110,18 @@ const CreateColaboratorModal = () => {
       divClassName: "col-start-1 col-end-5",
       defaultValue: costumerData?.details || "",
     },
+    cpfDoc: {
+      fieldType: "file",
+      fieldLabel: "CPF",
+    },
+    rgDoc: {
+      fieldType: "file",
+      fieldLabel: "RG",
+    },
+    otherDoc: {
+      fieldType: "file",
+      fieldLabel: "Outros",
+    },
   };
 
   const submitBtn = () => {
@@ -161,7 +174,7 @@ const CreateColaboratorModal = () => {
     if (submitted)
       return (
         <div className="flex flex-col w-full h-full justify-center items-center mx-auto text-[26px] dark:text-white">
-          <div>{error ? error : "Cliente Criado com Sucesso"}</div>
+          <div>{error ? (error as AxiosError).message : "Cliente Criado com Sucesso"}</div>
         </div>
       );
 
