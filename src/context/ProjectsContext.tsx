@@ -45,19 +45,6 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
 
   const updateProjects = async (debt: Partial<IProjectDataType>) => {
     setError(null);
-    // const newDebt = {
-    //   costumer_id: debt.costumer_id,
-    //   value: debt.value,
-    //   initial_value: debt.initial_value,
-    //   payment_method: debt.payment_method,
-    //   fee: debt.fee,
-    //   initial_date: debt.initial_date,
-    //   due_dates: debt.due_dates,
-    //   payed: debt.payed,
-    //   late_fee: debt.late_fee,
-    //   callings: debt.callings,
-    //   description: debt.description,
-    // };
 
     const doc = debt?.doc?.[0];
     const fd = new FormData();

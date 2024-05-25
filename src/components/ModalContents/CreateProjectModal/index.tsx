@@ -56,6 +56,7 @@ const CreateProjectModal = () => {
   const onSubmit = async (data: any) => {
     console.log({ data });
     data.value = Number(data.initial_value) * (1 + Number(data.fee) / 100);
+    data.fee = Number(data.fee) / 100;
     data.due_dates = setDueDateByPeriod(data.initial_date);
 
     console.log({ data });
@@ -72,7 +73,7 @@ const CreateProjectModal = () => {
       value: Number(tempDebtData.value),
       initial_value: Number(tempDebtData.initial_value),
       payment_method: tempDebtData.payment_method,
-      fee: Number(tempDebtData.fee) / 100,
+      fee: Number(tempDebtData.fee),
       initial_date: new Date(tempDebtData.initial_date as unknown as string),
       due_dates: tempDebtData.due_dates,
       payed: Number(tempDebtData.payed),
@@ -114,7 +115,7 @@ const CreateProjectModal = () => {
       required: "Taxa é necessário",
       fieldLabel: "Taxa (%)",
       fieldType: "number",
-      defaultValue: String(debtData?.fee || 10),
+      defaultValue: String((debtData?.fee || 0.1) * 100),
       min: "0",
       step: "0.01",
     },

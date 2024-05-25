@@ -12,15 +12,8 @@ interface Props {
 }
 
 const ProjectListsFrame = ({ project }: Props) => {
-  const router = useRouter();
-
   const { deleteProject } = useUsers();
   const { setModalContentKey, setModalIsOpen } = useModals();
-
-  const stack = useState<string[]>();
-  const teamUids = useState<string[]>();
-
-  const edittables = { stack, teamUids };
 
   const onDeleteProject = async () => {
     setModalContentKey("deletedebt");
@@ -36,6 +29,9 @@ const ProjectListsFrame = ({ project }: Props) => {
       {project?.doc && (
         <div>
           <embed
+            onClick={() =>
+              project?.doc && open(project?.doc as unknown as string)
+            }
             src={project.doc as unknown as string}
             className="w-full max-h-[500px]"
           />
