@@ -4,15 +4,16 @@ import ColaboratorListsFrame from "@/components/Frames/Colaborator/ColaboratorLi
 import ColaboratorRestrictedFrame from "@/components/Frames/Colaborator/ColaboratorRestrictedFrame";
 import FadeIn from "@/components/UI/Animations/FadeIn";
 import BackButton from "@/components/UI/BackButton";
-import { useAuth } from "@/context/AuthContext";
 import { Transition } from "@headlessui/react";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 interface Props {
   user?: IUserDataType;
 }
 
 const ColaboratorDetailsLayout = ({ user }: Props) => {
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -21,8 +22,19 @@ const ColaboratorDetailsLayout = ({ user }: Props) => {
 
   if (!user) {
     return (
-      <div className="dark:text-white m-auto justify-center items-center h-full w-full">
-        <h1 className="m-auto text-center">Cliente não encontrado</h1>
+      <div className="flex relative justify-start gap-4 items-center flex-col px-12 shadow-lg min-h-[75vh] dark:text-white">
+        <h4 className="text-center "> Error 404: Cliente não encontrado</h4>
+        <div className="flex md:flex-row flex-col gap-4">
+          <button
+            onClick={() => router.push(`/costumers`)}
+            className="btn !bg-transparent"
+          >
+            Voltar
+          </button>
+          <button className="btn !text-white" onClick={() => location.reload()}>
+            Tentar Novamente
+          </button>
+        </div>
       </div>
     );
   }
