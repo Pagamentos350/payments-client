@@ -168,6 +168,7 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
         setAllUsers((await getAllUsers()) as IUserDataType[]);
       };
       fetcher();
+      setTimeout(() => fetcher(), 1000);
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

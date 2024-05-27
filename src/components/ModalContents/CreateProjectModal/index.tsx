@@ -200,8 +200,8 @@ const CreateProjectModal = () => {
                         ))}
                       </span>
                     ) : (
-                      <span className="!font-light">
-                        {formatItem(String(objValue), objEntry as any)}
+                      <span className="!font-light !font-light overflow-hidden text-ellipsis">
+                        {formatItem(objValue, objEntry as any)}
                       </span>
                     )}
                   </div>

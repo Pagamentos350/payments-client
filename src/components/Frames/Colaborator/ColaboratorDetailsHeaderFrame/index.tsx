@@ -129,13 +129,18 @@ const ColaboratorDetailsHeaderFrame = ({ user }: Props) => {
                     <div className="flex flex-wrap">
                       {formatItem(objValue, objKey as any)}
                     </div>
-                    <div className="absolute -top-8 -right-8">
-                      <EditButton
-                        fn={() =>
-                          handleChangeEdittables(typeKey, objValue ?? undefined)
-                        }
-                      />
-                    </div>
+                    {!["RG", "CPF"].includes(objKey) && (
+                      <div className="absolute -top-8 -right-8">
+                        <EditButton
+                          fn={() =>
+                            handleChangeEdittables(
+                              typeKey,
+                              objValue ?? undefined,
+                            )
+                          }
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
                 {edittables?.[typeKey] && (

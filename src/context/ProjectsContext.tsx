@@ -87,10 +87,12 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
 
     if (user) {
       const fetcher = async () => {
+        console.log("DEBTS UPDATE");
         setAllProjects((await getAllProjects()) as IProjectDataType[]);
       };
       if (user) {
         fetcher();
+        setTimeout(() => fetcher(), 1000);
       }
     }
     setLoading(false);

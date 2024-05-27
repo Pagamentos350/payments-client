@@ -148,8 +148,8 @@ const CreateColaboratorModal = () => {
                 <div key={i}>
                   <div className="flex flex-col md:flex-row gap-4">
                     <span>{translateItemKeys(objEntry)}:</span>
-                    <span className="!font-light">
-                      {formatItem(String(objValue), objEntry as any)}
+                    <span className="!font-light overflow-hidden text-ellipsis">
+                      {formatItem(objValue, objEntry as any)}
                     </span>
                   </div>
                 </div>
@@ -174,7 +174,11 @@ const CreateColaboratorModal = () => {
     if (submitted)
       return (
         <div className="flex flex-col w-full h-full justify-center items-center mx-auto text-[26px] dark:text-white">
-          <div>{error ? (error as AxiosError).message : "Cliente Criado com Sucesso"}</div>
+          <div>
+            {error
+              ? (error as AxiosError).message
+              : "Cliente Criado com Sucesso"}
+          </div>
         </div>
       );
 

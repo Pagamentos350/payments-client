@@ -24,6 +24,12 @@ export const formatItem = (
   key?: Partial<IFilterKeyOption> | keyof Partial<IRestrictedDataType> | "age",
 ): string | number | null => {
   if (key) {
+    if (["doc", "cpfDoc", "rgDoc", "otherDoc"].includes(key)) {
+      const name = (value as FileList)?.[0];
+      console.log({ value, name });
+      return (value as FileList)?.[0]?.name;
+    }
+
     if (key === "fee") {
       return `${(typeof value === "number"
         ? value * 100

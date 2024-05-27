@@ -1,6 +1,7 @@
 import { IProjectDataType, IUserDataType } from "@/@types";
 import DeleteButton from "@/components/Auth/DeleteButton";
 import EditButton from "@/components/Auth/EditButton";
+import DocumentDisplay from "@/components/UI/DocumentDisplay";
 import TinyItem from "@/components/UI/Items/TinyItem";
 import { useAuth } from "@/context/AuthContext";
 import { useModals } from "@/context/ModalsContext";
@@ -116,6 +117,22 @@ const ColaboratorListsFrame = ({ user }: Props) => {
             </div>
           );
         })}
+      </div>
+      <div className="w-full">
+        <div>
+          <p className="text-[21px] font-semibold mr-2">Documentos:</p>
+        </div>
+        <div className="flex flex-wrap gap-4">
+          {user?.cpfDoc && (
+            <DocumentDisplay doc={user.cpfDoc as unknown as string} />
+          )}
+          {user?.rgDoc && (
+            <DocumentDisplay doc={user.rgDoc as unknown as string} />
+          )}
+          {user?.otherDoc && (
+            <DocumentDisplay doc={user.otherDoc as unknown as string} />
+          )}
+        </div>
       </div>
       <DeleteButton
         userPermission={`${user.permission}`}
