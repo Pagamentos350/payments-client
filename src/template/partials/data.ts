@@ -18,7 +18,7 @@ export const restrictedNav: INavActions = [
   {
     displayName: "Gerenciamento",
     subActions: [
-      { displayName: "Adicionar Cliente", action: "addcolaborator" },
+      { displayName: "Cadastrar Cliente", action: "addcolaborator" },
       // { displayName: "Criar Projeto", action: "createprojects" },
     ],
   },

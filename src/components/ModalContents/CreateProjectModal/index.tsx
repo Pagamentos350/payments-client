@@ -108,7 +108,8 @@ const CreateProjectModal = () => {
       fieldType: "textarea",
       fieldLabel: "Descrição",
       divClassName: "col-start-1 col-end-4 row-start-2 row-end-6",
-      inputClassName: "max-h-32",
+      inputClassName: "min-h-[200px] max-h-32",
+
       defaultValue: String(debtData?.description || ""),
     },
     fee: {

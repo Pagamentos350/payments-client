@@ -27,7 +27,7 @@ const ColaboratorsLayout = () => {
 
   return (
     <section className="flex items-center flex-col dark:text-white shadow-2xl min-h-[80vh] m-4">
-      <h3>Colaboradores</h3>
+      <h3>Clientes</h3>
       <Transition.Root show={mounted}>
         <FadeIn delay="delay-[300ms]">
           <div className="w-full flex flex-col justify-center mt-12">

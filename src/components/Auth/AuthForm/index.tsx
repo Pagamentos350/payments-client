@@ -42,23 +42,31 @@ const AuthForm = ({
   } = methods;
 
   const onSubmit = async (data: IFormRegisterType) => {
-    const formError = formErrorsHandler(data);
+    const deformattedData: IFormRegisterType = {
+      ...data,
+      cpf: data.cpf?.replace(".", "").replace(".", "").replace("-", ""),
+      cep: data.cep?.replace("-", ""),
+    };
+    const formError = formErrorsHandler(deformattedData);
     const invalidMessage: string[] = [];
     if (type !== "login") {
-      if (data.rg) {
-        verifyUniqueField(data.rg, "rg") && invalidMessage.push("RG");
+      if (deformattedData?.rg) {
+        verifyUniqueField(deformattedData?.rg, "rg") &&
+          invalidMessage.push("RG");
       }
-      if (data.email) {
-        verifyUniqueField(data.email, "email") && invalidMessage.push("Email");
+      if (deformattedData.email) {
+        verifyUniqueField(deformattedData?.email, "email") &&
+          invalidMessage.push("Email");
       }
-      if (data.cpf) {
-        verifyUniqueField(data.cpf, "cpf") && invalidMessage.push("CPF");
+      if (deformattedData.cpf) {
+        verifyUniqueField(deformattedData?.cpf, "cpf") &&
+          invalidMessage.push("CPF");
       }
     }
 
     if (!formError && invalidMessage.length < 1) {
       try {
-        await handleOnSubmit(data);
+        await handleOnSubmit(deformattedData);
       } catch (error: any) {
         console.log({ error });
 

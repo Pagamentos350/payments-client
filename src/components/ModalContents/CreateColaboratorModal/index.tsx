@@ -95,8 +95,8 @@ const CreateColaboratorModal = () => {
       required: "CPF é necessário",
       fieldType: "text",
       fieldLabel: "CPF",
-      minLength: 11,
-      maxLength: 11,
+      minLength: 10,
+      maxLength: 14,
       defaultValue: costumerData?.cpf || "",
     },
     email: {
@@ -108,6 +108,7 @@ const CreateColaboratorModal = () => {
       fieldType: "textarea",
       fieldLabel: "Detalhes",
       divClassName: "col-start-1 col-end-5",
+      inputClassName: "min-h-[200px]",
       defaultValue: costumerData?.details || "",
     },
     cpfDoc: {

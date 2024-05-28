@@ -72,7 +72,7 @@ const SideMenu = () => {
                     {item?.subActions?.map((item: any, index: number) => (
                       <span
                         key={index}
-                        className={`cursor-pointer rounded-[15px] w-[80%] p-2 pl-8 ml-4 my-1 lg:my-0 items-center mr-4 lg:inline-block block`}
+                        className={`cursor-pointer rounded-[15px] w-[80%] p-2 pl-2 ml-2 my-1 lg:my-0 items-center mr-4 lg:inline-block block whitespace-nowrap`}
                       >
                         <span
                           onClick={() =>
