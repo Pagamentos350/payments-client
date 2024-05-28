@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 import { IUserType } from "@/@types";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { ENVS } from "@/utils/constants";
 import { deleteCookie, getCookie, setCookie } from "@/utils/cookieHandler";
 import { useRouter } from "next/router";
@@ -24,6 +24,9 @@ interface AuthContextProps {
   logOut: () => Promise<void>;
   getAuthToken: () => string;
   loadingUserCache: boolean;
+  forgotPassEmailSender: (email: string) => Promise<boolean>;
+  updatePassword: (token: string, password: string) => Promise<boolean>;
+  tokenValidation: (token: string) => Promise<boolean>;
   // changeUserPassword: (newPassword: string) => Promise<void>;
   // changeUserEmail: (newEmail: string) => Promise<void>;
 }
@@ -53,6 +56,82 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
     }
 
     return response;
+  };
+
+  const forgotPassEmailSender = async (email: string): Promise<boolean> => {
+    return await axios
+      .post(
+        `${ENVS.apiUrl}/forgotpassword`,
+        { email },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      )
+      .then((response: AxiosResponse) => {
+        const res = response.status === 200;
+        return res;
+      })
+      .catch(err => {
+        console.log(err);
+        return false
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const updatePassword = async (
+    token: string,
+    password: string,
+  ): Promise<boolean> => {
+    return await axios
+      .post(
+        `${ENVS.apiUrl}/updatepassword`,
+        { token, password },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      )
+      .then((response: AxiosResponse) => {
+        const res = response.status === 200;
+        return res;
+      })
+      .catch(err => {
+        console.log(err);
+        return false;
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const tokenValidation = async (token: string): Promise<boolean> => {
+    return await axios
+      .post(
+        `${ENVS.apiUrl}/validatetoken`,
+        { token },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      )
+      .then((response: AxiosResponse) => {
+        console.log({response});
+        const res = response.status === 200;
+        return res;
+      })
+      .catch(err => {
+        console.log(err);
+        return false;
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const logIn = async (email: string, password: string) => {
@@ -110,7 +189,6 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
       const token = getAuthToken();
       if (token || token !== "undefined") {
         const check: any = await checkToken(token);
-        console.log({ check });
         if (check?.result) {
           setUser({
             email: check.user.email,
@@ -143,6 +221,9 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
         logOut,
         getAuthToken,
         loadingUserCache,
+        forgotPassEmailSender,
+        updatePassword,
+        tokenValidation,
         // changeUserPassword,
         // changeUserEmail,
       }}

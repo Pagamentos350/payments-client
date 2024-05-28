@@ -15,6 +15,7 @@ interface Props {
   submitBtn: () => React.ReactNode | string;
   formFields: IFormFieldType;
   disabled?: boolean;
+  type?: string;
 }
 
 const defaultInputClass =
@@ -25,6 +26,7 @@ const AuthForm = ({
   handleOnSubmit,
   submitBtn,
   formFields,
+  type,
   disabled = false,
 }: Props) => {
   const methods = useForm<IFormRegisterType>({ mode: "onBlur" });
@@ -40,22 +42,20 @@ const AuthForm = ({
   } = methods;
 
   const onSubmit = async (data: IFormRegisterType) => {
-    console.log("test1", { data });
     const formError = formErrorsHandler(data);
     const invalidMessage: string[] = [];
-    if (data.rg) {
-      verifyUniqueField(data.rg, "rg") && invalidMessage.push("RG");
-    }
-    if (data.email) {
-      verifyUniqueField(data.email, "email") && invalidMessage.push("Email");
-    }
-    if (data.cpf) {
-      verifyUniqueField(data.cpf, "cpf") && invalidMessage.push("CPF");
+    if (type !== "login") {
+      if (data.rg) {
+        verifyUniqueField(data.rg, "rg") && invalidMessage.push("RG");
+      }
+      if (data.email) {
+        verifyUniqueField(data.email, "email") && invalidMessage.push("Email");
+      }
+      if (data.cpf) {
+        verifyUniqueField(data.cpf, "cpf") && invalidMessage.push("CPF");
+      }
     }
 
-    console.log({ invalidMessage });
-
-    console.log({ formError });
     if (!formError && invalidMessage.length < 1) {
       try {
         await handleOnSubmit(data);
@@ -166,6 +166,12 @@ const AuthForm = ({
               ? (formOptions?.max as unknown as number)
               : undefined
           }
+          onChange={evt =>
+            formOptions?._formStates?.[1]?.(
+              evt.target.value,
+            ) as unknown as string
+          }
+          value={formOptions?._formStates?.[0] as string}
         />
       </div>
     );

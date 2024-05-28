@@ -2,7 +2,7 @@ export const ENVS = {
   apiUrl: process.env.apiUrl as string,
 };
 
-export const publicRoutes = ["/"];
+export const publicRoutes = ["/", "/redefinepassword"];
 
 export const defaultColor = "#a40100";
 
