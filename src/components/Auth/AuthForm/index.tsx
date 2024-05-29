@@ -44,9 +44,14 @@ const AuthForm = ({
   const onSubmit = async (data: IFormRegisterType) => {
     const deformattedData: IFormRegisterType = {
       ...data,
-      cpf: data.cpf?.replace(".", "").replace(".", "").replace("-", ""),
-      cep: data.cep?.replace("-", ""),
     };
+
+    if (data?.cpf)
+      deformattedData.cpf = data.cpf
+        ?.replace(".", "")
+        .replace(".", "")
+        .replace("-", "");
+    if (data?.cep) deformattedData.cpf = data.cep?.replace("-", "");
     const formError = formErrorsHandler(deformattedData);
     const invalidMessage: string[] = [];
     if (type !== "login") {

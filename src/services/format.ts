@@ -130,9 +130,9 @@ export const sortItemsData = (data: any) => {
 };
 
 const formatCPF = (cpf: string): string => {
-  cpf = cpf.replace(/[^\d]/g, "");
+  cpf = cpf?.replace(/[^\d]/g, "");
 
-  return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+  return cpf?.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
 };
 const formatPhone = (phone: string): string => {
   if (/^\d{11}$/.test(phone)) {
