@@ -1,6 +1,7 @@
 import { IDateObj, IUserDataType } from "@/@types";
 import EditButton from "@/components/Auth/EditButton";
 import TinyItem from "@/components/UI/Items/TinyItem";
+import { useAuth } from "@/context/AuthContext";
 import { useUsers } from "@/context/UsersContext";
 import { translateItemKeys, formatItem } from "@/services/format";
 import { useState } from "react";
@@ -14,6 +15,7 @@ interface Props {
 
 const ColaboratorDetailsHeaderFrame = ({ user }: Props) => {
   const { updateUser } = useUsers();
+  const { user: activeUser } = useAuth();
 
   const [edittables, setEdittables] = useState<Partial<IUserDataType>>({});
 
@@ -28,11 +30,16 @@ const ColaboratorDetailsHeaderFrame = ({ user }: Props) => {
     });
   };
 
-  const submitEdittable = async (key: keyof IUserDataType) => {
-    const obj: any = { costumer_id: user.costumer_id };
-    obj[key] = edittables[key];
+  const submitEdittable = async () => {
+    let obj: any = { costumer_id: user.costumer_id };
+    obj = { ...obj, edittables };
     await updateUser(obj);
-    handleChangeEdittables(key, undefined);
+    setEdittables({
+      email: undefined,
+      phone: undefined,
+      adress: undefined,
+      cep: undefined,
+    });
   };
 
   console.log({ user });
@@ -40,64 +47,32 @@ const ColaboratorDetailsHeaderFrame = ({ user }: Props) => {
   return (
     <div className="frame-container">
       <div className="w-full">
-        <div className="flex items-center">
-          <FaUserAlt className="h-24 w-24" />
+        <div className="flex gap-4 items-center">
+          <FaUserAlt className=" h-24 w-24" />
           {!edittables?.name && !edittables?.last_name && (
             <h3 className="font-bold text-[32px] w-[60%] relative">
-              <div>
-                {edittables?.name || user?.name}{" "}
-                <div className="absolute top-1 -right-8">
-                  <EditButton fn={() => setEdittables({ name: user.name })} />
-                </div>
-              </div>
-              <div>
-                {edittables?.last_name || user?.last_name}{" "}
-                <div className="absolute bottom-1 -right-8">
-                  <EditButton
-                    fn={() => setEdittables({ last_name: user.last_name })}
-                  />
-                </div>
-              </div>
+              <div>{edittables?.name || user?.name} </div>
+              <div>{edittables?.last_name || user?.last_name} </div>
             </h3>
           )}
           {edittables?.name && (
             <div className="relative w-[60%]">
               <input
-                className="font-bold text-[32px] w-full bg-transparent"
+                className="font-bold text-[32px] w-full bg-transparent border-b border-solid border-white"
                 type="text"
                 value={edittables?.name || user.name}
                 onChange={evt => setEdittables({ name: evt.target.value })}
               />
-              <div className="absolute flex top-1 gap-2 -right-20 ">
-                <GiConfirmed
-                  className="w-8 h-8 cursor-pointer"
-                  onClick={() => submitEdittable("name")}
-                />
-                <ImCancelCircle
-                  className="w-8 h-8 cursor-pointer"
-                  onClick={() => setEdittables({ name: undefined })}
-                />
-              </div>
             </div>
           )}
           {edittables?.last_name && (
             <div className="relative w-[60%]">
               <input
-                className="font-bold text-[32px] w-full bg-transparent"
+                className="font-bold text-[32px] w-full bg-transparent border-b border-solid border-white"
                 type="text"
                 value={edittables?.last_name || user.last_name}
                 onChange={evt => setEdittables({ last_name: evt.target.value })}
               />
-              <div className="absolute flex top-1 gap-2 -right-20 ">
-                <GiConfirmed
-                  className="w-8 h-8 cursor-pointer"
-                  onClick={() => submitEdittable("last_name")}
-                />
-                <ImCancelCircle
-                  className="w-8 h-8 cursor-pointer"
-                  onClick={() => setEdittables({ last_name: undefined })}
-                />
-              </div>
             </div>
           )}
         </div>
@@ -106,7 +81,7 @@ const ColaboratorDetailsHeaderFrame = ({ user }: Props) => {
             email: user.email,
             phone: user.phone,
             adress: user.adress,
-            CEP: user.cep,
+            cep: user.cep,
             RG: user.rg,
             CPF: user.cpf,
           }).map(([objKey, objValue], index) => {
@@ -125,28 +100,16 @@ const ColaboratorDetailsHeaderFrame = ({ user }: Props) => {
                 </span>
 
                 {!edittables?.[typeKey] && (
-                  <div className="text-[21px] w-[40%] relative">
+                  <div className="text-[21px] w-[70%] relative p-2">
                     <div className="flex flex-wrap">
                       {formatItem(objValue, objKey as any)}
                     </div>
-                    {!["RG", "CPF"].includes(objKey) && (
-                      <div className="absolute -top-8 -right-8">
-                        <EditButton
-                          fn={() =>
-                            handleChangeEdittables(
-                              typeKey,
-                              objValue ?? undefined,
-                            )
-                          }
-                        />
-                      </div>
-                    )}
                   </div>
                 )}
                 {edittables?.[typeKey] && (
-                  <div className="relative w-[60%]">
+                  <div className="relative w-[70%]">
                     <input
-                      className="text-[21px] w-full bg-transparent"
+                      className="text-[21px] w-full bg-transparent border border-solid border-white p-2"
                       type={typeKey}
                       value={
                         (edittables?.[typeKey] ||
@@ -156,24 +119,56 @@ const ColaboratorDetailsHeaderFrame = ({ user }: Props) => {
                         handleChangeEdittables(typeKey, evt.target.value)
                       }
                     />
-                    <div className="absolute flex top-1 gap-2 -right-20 ">
-                      <GiConfirmed
-                        className="w-8 h-8 cursor-pointer"
-                        onClick={() => submitEdittable(typeKey)}
-                      />
-                      <ImCancelCircle
-                        className="w-8 h-8 cursor-pointer"
-                        onClick={() =>
-                          handleChangeEdittables(typeKey, undefined)
-                        }
-                      />
-                    </div>
                   </div>
                 )}
               </div>
             );
           })}
         </div>
+      </div>
+      <div>
+        {Number(activeUser?.permission) > 2 && (
+          <div className="mt-8">
+            {!edittables?.email ? (
+              <button
+                className="btn"
+                onClick={() =>
+                  setEdittables({
+                    email: user.email,
+                    phone: user.phone,
+                    adress: user.adress,
+                    cep: user.cep,
+                    name: user.name,
+                    last_name: user.last_name,
+                  })
+                }
+              >
+                Edit
+              </button>
+            ) : (
+              <div className=" flex gap-2 ">
+                <button className="btn " onClick={() => submitEdittable()}>
+                  Confirm
+                </button>
+                <button
+                  className="btn !bg-transparent"
+                  onClick={() =>
+                    setEdittables({
+                      email: undefined,
+                      phone: undefined,
+                      adress: undefined,
+                      cep: undefined,
+                      name: undefined,
+                      last_name: undefined,
+                    })
+                  }
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

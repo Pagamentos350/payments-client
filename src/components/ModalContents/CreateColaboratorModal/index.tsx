@@ -87,8 +87,8 @@ const CreateColaboratorModal = () => {
       required: "RG é necessário",
       fieldType: "number",
       fieldLabel: "RG",
-      minLength: 7,
-      maxLength: 7,
+      minLength: 5,
+      maxLength: 11,
       defaultValue: costumerData?.rg || "",
     },
     cpf: {

@@ -58,7 +58,7 @@ const FilterOptionsPanel = ({
           </div>
         )}
       </div>
-      <div className="hidden md:flex w-[90%] shadow-2xl md:shadow-none md:border-t-0 md:border-x-0 md:rounded-none border border-grey-200 md:!border-b md:!border-b-gray-300 rounded-[15px] flex-col md:flex-row justify-around text-lg mx-auto hover:dark:bg-gray-900">
+      <div className="hidden md:flex w-[90%] shadow-2xl md:shadow-none md:border-t-0 md:border-x-0 md:rounded-none border border-grey-200 md:!border-b md:!border-b-gray-300 rounded-[15px] flex-col md:flex-row justify-around text-lg hover:dark:bg-gray-900">
         {sortedData.map(([objKey], index) => {
           if (["id", "uid"].includes(objKey)) {
             return null;
