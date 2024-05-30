@@ -51,6 +51,7 @@ interface UsersContextProps {
   addDebtToUser: (costumer_id: string, debt: Partial<IProjectDataType>) => void;
   deleteProject: (debt_id: string) => Promise<void>;
   update: boolean;
+  sendNotify: (costumer_id: string) => void;
 }
 
 export const UsersContext = createContext({} as UsersContextProps);
@@ -104,15 +105,12 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
       fd.append("data", JSON.stringify(user));
       if (user?.cpfDoc) {
         fd.append("cpfDoc", user.cpfDoc[0]);
-        console.log("cpfDoc", user.cpfDoc[0]);
       }
       if (user?.rgDoc) {
         fd.append("rgDoc", user.rgDoc[0]);
-        console.log("rgDoc", user.rgDoc[0]);
       }
       if (user?.otherDoc) {
         fd.append("otherDoc", user.otherDoc[0]);
-        console.log("otherDoc", user.otherDoc[0]);
       }
 
       const authToken = getAuthToken();
@@ -160,10 +158,7 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
 
   useEffect(() => {
     setLoading(true);
-    console.log("UPDATING", { update, user });
     if (user) {
-      console.log("UPDATING", { update });
-
       const fetcher = async () => {
         setAllUsers((await getAllUsers()) as IUserDataType[]);
       };
@@ -180,7 +175,6 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
       const res = await axios.get(`${ENVS.apiUrl}/debts?costumer_id=${uid}`, {
         headers: { Authorization: "Bearer " + authToken },
       });
-      console.log({ res });
       return res.data.result;
     } catch (error) {
       console.error(error);
@@ -198,6 +192,24 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
       console.error(error);
     }
     return false;
+  };
+
+  const sendNotify = async (costumer_id: string) => {
+    try {
+      const authToken = getAuthToken();
+      const res = await axios.post(
+        `${ENVS.apiUrl}/debts/notify`,
+        { costumer_id },
+        {
+          headers: { Authorization: "Bearer " + authToken },
+        },
+      );
+      return res.data.result;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setUpdate(e => !e);
+    }
   };
 
   const addDebtToUser = async (
@@ -222,7 +234,6 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
     const doc = debt?.doc?.[0];
 
     const fd = new FormData();
-    console.log({ doc });
     fd.append("file", doc as File);
 
     fd.append("data", JSON.stringify(newDebt));
@@ -267,6 +278,7 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
         verifyUniqueField,
         update,
         deleteProject,
+        sendNotify,
       }}
     >
       {children}

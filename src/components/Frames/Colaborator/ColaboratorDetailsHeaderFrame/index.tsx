@@ -4,7 +4,7 @@ import TinyItem from "@/components/UI/Items/TinyItem";
 import { useAuth } from "@/context/AuthContext";
 import { useUsers } from "@/context/UsersContext";
 import { translateItemKeys, formatItem } from "@/services/format";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaUserAlt } from "react-icons/fa";
 import { GiConfirmed } from "react-icons/gi";
 import { ImCancelCircle } from "react-icons/im";
@@ -14,10 +14,15 @@ interface Props {
 }
 
 const ColaboratorDetailsHeaderFrame = ({ user }: Props) => {
-  const { updateUser } = useUsers();
+  const { updateUser, sendNotify } = useUsers();
   const { user: activeUser } = useAuth();
 
   const [edittables, setEdittables] = useState<Partial<IUserDataType>>({});
+  const [result, setResult] = useState<string | null>("Cobrança enviada");
+
+  useEffect(() => {
+    setTimeout(() => setResult(null), 5000);
+  }, [result]);
 
   const handleChangeEdittables = (
     key: keyof IUserDataType,
@@ -128,7 +133,22 @@ const ColaboratorDetailsHeaderFrame = ({ user }: Props) => {
       </div>
       <div>
         {Number(activeUser?.permission) > 2 && (
-          <div className="mt-8">
+          <div className="mt-8 flex gap-2 relative">
+            <span className="absolute -bottom-8 left-14 text-red-600 text-bold z-30 text-center">
+              {result}
+            </span>
+            <button
+              className="btn"
+              onClick={async () => {
+                const res: any = await sendNotify(user.costumer_id);
+                setResult(
+                  res?.result ? "Cobranças Enviadas" : "Algo deu errado",
+                );
+                // console.log("notify", { res });
+              }}
+            >
+              Cobrar
+            </button>
             {!edittables?.email ? (
               <button
                 className="btn"
@@ -143,12 +163,12 @@ const ColaboratorDetailsHeaderFrame = ({ user }: Props) => {
                   })
                 }
               >
-                Edit
+                Editar
               </button>
             ) : (
               <div className=" flex gap-2 ">
                 <button className="btn " onClick={() => submitEdittable()}>
-                  Confirm
+                  Confirmar
                 </button>
                 <button
                   className="btn !bg-transparent"
@@ -163,7 +183,7 @@ const ColaboratorDetailsHeaderFrame = ({ user }: Props) => {
                     })
                   }
                 >
-                  Cancel
+                  Cancelar
                 </button>
               </div>
             )}
