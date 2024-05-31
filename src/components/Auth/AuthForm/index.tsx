@@ -51,7 +51,9 @@ const AuthForm = ({
         ?.replace(".", "")
         .replace(".", "")
         .replace("-", "");
-    if (data?.cep) deformattedData.cpf = data.cep?.replace("-", "");
+    if (data?.cep) deformattedData.cep = data.cep?.replace("-", "");
+
+    console.log({ data, deformattedData });
     const formError = formErrorsHandler(deformattedData);
     const invalidMessage: string[] = [];
     if (type !== "login") {
@@ -59,11 +61,11 @@ const AuthForm = ({
         verifyUniqueField(deformattedData?.rg, "rg") &&
           invalidMessage.push("RG");
       }
-      if (deformattedData.email) {
+      if (deformattedData?.email) {
         verifyUniqueField(deformattedData?.email, "email") &&
           invalidMessage.push("Email");
       }
-      if (deformattedData.cpf) {
+      if (deformattedData?.cpf) {
         verifyUniqueField(deformattedData?.cpf, "cpf") &&
           invalidMessage.push("CPF");
       }

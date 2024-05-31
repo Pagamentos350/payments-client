@@ -32,7 +32,7 @@ export const formErrorsHandler = ({
     return "O contato precisar ter 11 numeros contando com o DDD";
   }
   if (cadastroDePessoaFisica || cpf) {
-    if (cadastroDePessoaFisica?.length !== 11 && cpf?.length !== 11) {
+    if (cpf?.length !== 11) {
       return "CPF precisa ter 11 digitos";
     }
     // if (!validarCPF(cadastroDePessoaFisica || cpf)) {
