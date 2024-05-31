@@ -7,7 +7,7 @@ const Custom404 = () => {
   return (
     <>
       <Meta
-        title={"Gerenciador Dev - Erro 404"}
+        title={"Pagamentos 350 - Erro 404"}
         description={"Página não encontrada"}
       />
       <div className="flex flex-col justify-center items-center gap-4">

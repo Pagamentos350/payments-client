@@ -127,7 +127,7 @@ const RedefinePassword = () => {
   return (
     <>
       <Meta
-        title={"Gerenciamento Dev - Login"}
+        title={"Pagamentos 350- Login"}
         description={"Bem-vindo ao App de Gerenciamento de Desenvolvedores"}
       />
       <RedefinePasswordLayout />

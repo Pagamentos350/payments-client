@@ -4,7 +4,7 @@ const Custom500 = () => {
   return (
     <>
       <Meta
-        title={"Gerenciador Dev - Erro 500"}
+        title={"Pagamentos 350 - Erro 500"}
         description={"Problemas no Servidor"}
       />
       <div className="flex flex-col justify-center items-center gap-4">

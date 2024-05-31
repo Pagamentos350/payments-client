@@ -5,7 +5,7 @@ import Image from 'next/image'
 const Home = () => {
   return (
     <>
-    <Meta title={'Gerenciamento Dev - Login'} description={'Bem-vindo ao App de Gerenciamento de Desenvolvedores'} />
+    <Meta title={'Pagamentos 350 - Login'} description={'Bem-vindo ao App de Gerenciamento de Desenvolvedores'} />
     <HomeLayout />
     </>
   )
