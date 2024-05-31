@@ -7,6 +7,9 @@ import { AiOutlineProject } from "react-icons/ai";
 import { ImCancelCircle } from "react-icons/im";
 import { GiConfirmed } from "react-icons/gi";
 import { SiCashapp } from "react-icons/si";
+import { getMessage } from "@/utils/messager";
+import { useUsers } from "@/context/UsersContext";
+import { useAuth } from "@/context/AuthContext";
 
 interface Props {
   project: IProjectDataType;
@@ -14,6 +17,8 @@ interface Props {
 
 const ProjectDetailsHeaderFrame = ({ project }: Props) => {
   const { updateProjects } = useProjects();
+  const { allUsers } = useUsers();
+  const { user: activeUser } = useAuth();
 
   const [edittables, setEdittables] = useState<Partial<IProjectDataType>>({});
 
@@ -176,6 +181,7 @@ const ProjectDetailsHeaderFrame = ({ project }: Props) => {
                       "due_dates",
                       "fee",
                       "late_fee",
+                      "initial_date",
                     ].includes(objKey) && (
                       <div className="absolute top-1 -right-10">
                         <EditButton
@@ -239,6 +245,26 @@ const ProjectDetailsHeaderFrame = ({ project }: Props) => {
             );
           })}
         </div>
+      </div>
+      <div>
+        {Number(activeUser?.permission) > 2 && (
+          <div className="mt-8 flex gap-2 relative">
+            <button
+              className="btn"
+              onClick={async () => {
+                const wppMsg = getMessage(project, allUsers);
+                const costumerInDebt = allUsers.find(
+                  e => e?.costumer_id === project?.costumer_id,
+                );
+                const url: any = `https://wa.me/${costumerInDebt?.phone}?text=${wppMsg}`;
+
+                if (Boolean(wppMsg) && costumerInDebt) open(url);
+              }}
+            >
+              Whatsapp
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

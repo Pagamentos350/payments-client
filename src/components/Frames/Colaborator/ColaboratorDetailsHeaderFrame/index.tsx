@@ -18,7 +18,7 @@ const ColaboratorDetailsHeaderFrame = ({ user }: Props) => {
   const { user: activeUser } = useAuth();
 
   const [edittables, setEdittables] = useState<Partial<IUserDataType>>({});
-  const [result, setResult] = useState<string | null>("Cobrança enviada");
+  const [result, setResult] = useState<string | null>(null);
 
   useEffect(() => {
     setTimeout(() => setResult(null), 5000);
