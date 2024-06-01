@@ -71,9 +71,7 @@ const DeleteColaboratorModal = ({ type }: Props) => {
       return (
         <div className="flex flex-col w-full h-full justify-center items-center mx-auto text-[26px] text-center dark:text-white">
           <div>
-            {error
-              ? error?.message || "Error"
-              : type === "costumer"
+            {type === "costumer"
               ? "Cliente Excluido com Sucesso"
               : "Débito Excluido com Sucesso"}
           </div>
