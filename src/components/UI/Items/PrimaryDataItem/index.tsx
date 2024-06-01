@@ -49,7 +49,7 @@ const PrimaryDataItem = ({ data, type }: Props) => {
   };
 
   return (
-    <div className=" relative flex w-[90%] wrap first:mt-0 mt-4 md:mt-0 shadow-2xl md:shadow-none md:border-t-0 md:border-x-0 md:rounded-none border border-grey-200 md:!border-b md:!border-b-gray-300 rounded-[15px] flex-col md:flex-row justify-between text-lg md:hover:dark:bg-[#333333] md:hover:bg-gray-200 even:bg-gray-100 dark:even:bg-[#333333] ">
+    <div className=" relative flex w-[100%] wrap first:mt-0 mt-4 md:mt-0 shadow-2xl md:shadow-none md:border-t-0 md:border-x-0 md:rounded-none border border-grey-200 md:!border-b md:!border-b-gray-300 rounded-[15px] flex-col md:flex-row justify-between text-lg md:hover:dark:bg-[#333333] md:hover:bg-gray-200 even:bg-gray-100 dark:even:bg-[#333333] ">
       {sortedData.map(([objKey, objValue], index) => {
         if (
           [
@@ -96,7 +96,7 @@ const PrimaryDataItem = ({ data, type }: Props) => {
           </div>
         );
       })}
-      <div className="absolute right-4  md:-right-20 md:top-[20%] bottom-[5%]">
+      <div className="absolute md:static right-4  min-h-[50px] flex justify-center items-center bottom-[5%]">
         <Link
           href={`/${type}/${
             type === "costumers"

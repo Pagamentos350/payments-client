@@ -4,6 +4,7 @@ import { useTheme } from "@/context/ThemeContext";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import MobileMenu from "./MobileMenu";
+import { FaBell } from "react-icons/fa";
 import CompanyLogo from "@/components/UI/CompanyLogo";
 
 const Header = () => {
@@ -28,7 +29,7 @@ const Header = () => {
   useEffect(() => {
     setMobileMenuIsOpen(false);
   }, [router]);
-  
+
   if (!mounted) return null;
   return (
     <>
@@ -54,6 +55,9 @@ const Header = () => {
               </svg>
             </button>
           </div>
+        </div>
+        <div>
+          <FaBell />
         </div>
         <div className="flex gap-2">
           Olá, {user?.email},{" "}

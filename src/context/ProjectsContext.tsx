@@ -14,6 +14,7 @@ import { useAuth } from "@/context/AuthContext";
 import { IProjectDataType, IUserDataType } from "@/@types";
 import { ENVS } from "@/utils/constants";
 import { useUsers } from "./UsersContext";
+import { getClosestDate, getDaysLate } from "@/utils/messager";
 
 interface IProjectsProvider {
   children: ReactNode;
@@ -27,17 +28,63 @@ interface ProjectsContextProps {
   updateProjects: (projectPart: Partial<IProjectDataType>) => Promise<void>;
   setUpdate: Dispatch<SetStateAction<boolean>>;
   findProject: (ui: string) => IProjectDataType | undefined;
+  lateMessages: {
+    value: number;
+    costumer: string;
+    costumer_cpf: number;
+    due_date: Date;
+    daysLate: number;
+  }[];
 }
 
 export const ProjectsContext = createContext({} as ProjectsContextProps);
 
 export const ProjectsProvider = ({ children }: IProjectsProvider) => {
   const { user, getAuthToken } = useAuth();
-  const { update: usersUpdate } = useUsers();
+  const { update: usersUpdate, allUsers } = useUsers();
   const [allProjects, setAllProjects] = useState<any[]>([]);
   const [error, setError] = useState<any | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
   const [update, setUpdate] = useState<boolean>(false);
+
+  const [lateMessages, setLateMessages] = useState<any[]>([]);
+
+  const getLateMessages = (allProjects: IProjectDataType[]) => {
+    const copyArr: IProjectDataType[] = JSON.parse(JSON.stringify(allProjects));
+    const lateCopyArr: any = [];
+    const messages: any = [];
+    copyArr.forEach(debt => {
+      const checkClosestDate = getClosestDate(debt.due_dates);
+      const daysLate = checkClosestDate?.data
+        ? getDaysLate(new Date(checkClosestDate?.data))
+        : 999;
+      const daysLateCheck = checkClosestDate?.data ? daysLate <= 3 : false;
+
+      if (daysLateCheck) {
+        lateCopyArr.push(debt);
+        const costumerinDebt: IUserDataType | undefined = allUsers.find(
+          user => user.costumer_id === debt.costumer_id,
+        );
+
+        if (costumerinDebt)
+          messages.push({
+            value: debt.value,
+            costumer: costumerinDebt.name + costumerinDebt.last_name,
+            costumer_cpf: costumerinDebt.cpf,
+            due_date: checkClosestDate,
+            daysLate: daysLate,
+          });
+      }
+    });
+
+    setLateMessages(messages);
+
+    return lateCopyArr;
+  };
+
+  useEffect(() => {
+    getLateMessages(allProjects);
+  }, [allProjects]);
 
   const findProject = (id: string) => {
     return allProjects.find(e => e.id === id);
@@ -108,6 +155,7 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
         setUpdate,
         updateProjects,
         findProject,
+        lateMessages,
       }}
     >
       {children}

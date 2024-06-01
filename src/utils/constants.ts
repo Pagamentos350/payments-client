@@ -3,6 +3,7 @@ export const ENVS = {
 };
 
 export const publicRoutes = ["/", "/redefinepassword", "/about"];
+export const privateRoutes = ["/costumers", "/debts", "/costumers/[id]", "/debts/[id]"];
 
 export const defaultColor = "#a40100";
 
