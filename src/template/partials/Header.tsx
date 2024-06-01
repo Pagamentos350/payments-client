@@ -68,7 +68,7 @@ const Header = () => {
             )}
           </div>
           {notificationIsOpen && (
-            <div className="absolute top-[100%] bg-primary dark:bg-[#333333] rounded-lg hover:!bg-gray-400 w-[80%] min-h-[100px]">
+            <div className="absolute top-[100%] bg-primary dark:bg-[#333333] rounded-lg hover:!bg-gray-400 w-[80%] min-h-[100px] max-h-[85vh] overflow-y-auto">
               {loading ? (
                 <div className="loading-circle" />
               ) : lateMessages && lateMessages?.length > 0 ? (
