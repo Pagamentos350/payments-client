@@ -1,6 +1,7 @@
 import { IFilterKeyOption, IFilterOptions } from "@/@types";
 import AddButton from "@/components/Auth/AddButton";
 import { useModals } from "@/context/ModalsContext";
+import { useUsers } from "@/context/UsersContext";
 import {
   formatItem,
   sortItemsData,
@@ -8,6 +9,7 @@ import {
 } from "@/services/format";
 import { Dispatch, SetStateAction } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
+import { MdOutlineRefresh } from "react-icons/md";
 
 interface Props {
   filterOptions: IFilterOptions;
@@ -22,6 +24,7 @@ const FilterOptionsPanel = ({
 }: Props) => {
   const sortedData = sortItemsData(filterOptions);
   const { setModalIsOpen, setModalContentKey } = useModals();
+  const { setUpdate } = useUsers();
 
   const handleChangeFilter = (key: string, value: string) => {
     setFilterOptions(prevState => {
@@ -34,16 +37,24 @@ const FilterOptionsPanel = ({
   return (
     <>
       <div className="w-full flex-col md:flex-row md:justify-between rounded-full dark:border-b-0 dark:border-l-0 dark:border-r-0 md:rounded-none md:mb-0 mb-4 shadow-lg bg-white dark:bg-[#333333] dark:border dark:border-grey-200  md:bg-gray-200 md:h-[50px] mx-auto flex gap-4 justify-center h-auto items-center px-4">
-        <AddButton
-          fn={() => {
-            setModalContentKey(
-              filterOptions?.email !== undefined
-                ? "addcolaborator"
-                : "createprojects",
-            );
-            setModalIsOpen(true);
-          }}
-        />
+        <div className="flex gap-4">
+          <AddButton
+            fn={() => {
+              setModalContentKey(
+                filterOptions?.email !== undefined
+                  ? "addcolaborator"
+                  : "createprojects",
+              );
+              setModalIsOpen(true);
+            }}
+          />
+          <MdOutlineRefresh
+            className="w-12 h-12 cursor-pointer text-blue-900"
+            onClick={() => {
+              setUpdate(e => !e);
+            }}
+          />
+        </div>
         {!hideSearch && (
           <div className="flex gap-3 h-full">
             <div className="h-[75%] relative">

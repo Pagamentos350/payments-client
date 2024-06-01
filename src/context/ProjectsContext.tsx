@@ -34,6 +34,8 @@ interface ProjectsContextProps {
     costumer_cpf: number;
     due_date: Date;
     daysLate: number;
+    debt_id: string;
+    costumer_id: string;
   }[];
 }
 
@@ -66,13 +68,15 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
           user => user.costumer_id === debt.costumer_id,
         );
 
-        if (costumerinDebt)
+        if (costumerinDebt && checkClosestDate)
           messages.push({
             value: debt.value,
-            costumer: costumerinDebt.name + costumerinDebt.last_name,
+            costumer: costumerinDebt.name + " " + costumerinDebt.last_name,
             costumer_cpf: costumerinDebt.cpf,
-            due_date: checkClosestDate,
+            due_date: new Date(checkClosestDate?.data),
             daysLate: daysLate,
+            debt_id: debt.debt_id,
+            costumer_id: costumerinDebt.costumer_id,
           });
       }
     });
