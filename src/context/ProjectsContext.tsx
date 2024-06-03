@@ -87,7 +87,7 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
   };
 
   useEffect(() => {
-    getLateMessages(allProjects);
+    if (allProjects) getLateMessages(allProjects);
   }, [allProjects]);
 
   const findProject = (id: string) => {

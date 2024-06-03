@@ -36,7 +36,7 @@ const FilterOptionsPanel = ({
 
   return (
     <>
-      <div className="w-full flex-col md:flex-row md:justify-between rounded-full dark:border-b-0 dark:border-l-0 dark:border-r-0 md:rounded-none md:mb-0 mb-4 shadow-lg bg-white dark:bg-[#333333] dark:border dark:border-grey-200  md:bg-gray-200 md:h-[50px] mx-auto flex gap-4 justify-center h-auto items-center px-4">
+      <div className="w-full flex-col md:flex-row md:justify-between rounded-2xl dark:border-b-0 dark:border-l-0 dark:border-r-0 md:rounded-none md:mb-0 mb-4 shadow-lg bg-white dark:bg-[#333333] dark:border dark:border-grey-200  md:bg-gray-200 md:h-[50px] mx-auto flex gap-4 justify-center h-[150px] items-center px-4">
         <div className="flex gap-4">
           <AddButton
             fn={() => {
@@ -56,7 +56,7 @@ const FilterOptionsPanel = ({
           />
         </div>
         {!hideSearch && (
-          <div className="flex gap-3 h-full">
+          <div className="flex md:h-full md:flex-row flex-col gap-4 md:gap-3 mb-4">
             <div className="h-[75%] relative">
               <input
                 value={filterOptions.name as string}

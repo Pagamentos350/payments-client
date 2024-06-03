@@ -57,7 +57,7 @@ const Header = () => {
             </button>
           </div>
         </div>
-        <div className="flex relative gap-8">
+        <div className="flex relative gap-4 md:gap-8">
           <div
             className="relative"
             onClick={() => setNotificationIsOpen(e => !e)}
@@ -98,7 +98,7 @@ const Header = () => {
             </div>
           )}
           <div className="flex gap-2">
-            Olá, {user?.email},{" "}
+            <span className="flex items-center">{user?.email}, </span>
             <span
               className="underline-animation-event inline-block cursor-pointer"
               onClick={handleLogout}
